@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 locals {
   nm_network_setup_script = length(var.private_networks_settings) > 0 && var.server_type != "" ? templatefile(
-    "${path.module}/config_files/network_setup_script.sh.tmpl",
+    "${path.module}/config_templates/nm/network_setup_script.sh.tmpl",
     {
       server_type               = var.server_type,
       server_image              = var.server_image
@@ -28,7 +28,7 @@ locals {
 
   # Cloud config final file output
   nm_cloud_config_file = templatefile(
-    "${path.module}/config_files/cloud_init.yaml.tmpl",
+    "${path.module}/config_templates/nm/cloud_init.yaml.tmpl",
     {
       private_network_script_base64         = length(var.private_networks_settings) > 0 ? base64encode(local.nm_network_setup_script) : "",
       private_network_script_path           = local.nm_network_setup_script_path,

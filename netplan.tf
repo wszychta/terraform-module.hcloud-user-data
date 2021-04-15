@@ -1,7 +1,7 @@
 
 locals {
   netplan_network_file = length(var.private_networks_settings) > 0 && var.server_type != "" ? templatefile(
-    "${path.module}/config_files/private_network.tmpl",
+    "${path.module}/config_templates/netplan/private_network.tmpl",
     {
       server_type               = var.server_type,
       private_networks_settings = var.private_networks_settings
@@ -11,7 +11,7 @@ locals {
 
   # Script used for merging generated network file with existing netplan file
   netplan_network_merge_script = length(var.private_networks_settings) > 0 ? templatefile(
-    "${path.module}/config_files/merge_network_files.sh.tmpl",
+    "${path.module}/config_templates/netplan/merge_network_files.sh.tmpl",
     {
       yq_version                = var.yq_version,
       yq_binary                 = var.yq_binary,
@@ -23,7 +23,7 @@ locals {
 
   # Cloud config final file output
   netplan_cloud_config_file = templatefile(
-    "${path.module}/config_files/cloud_init.yaml.tmpl",
+    "${path.module}/config_templates/netplan/cloud_init.yaml.tmpl",
     {
       private_network_file_base64           = length(var.private_networks_settings) > 0 ? base64encode(local.netplan_network_file) : "",
       private_network_file_path             = local.netplan_network_file_path,
