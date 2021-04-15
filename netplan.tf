@@ -15,7 +15,7 @@ locals {
     {
       yq_version                = var.yq_version,
       yq_binary                 = var.yq_binary,
-      private_network_file_path = local.network_file_path,
+      private_network_file_path = local.netplan_network_file_path,
       netplan_file_path         = "/etc/netplan/50-cloud-init.yaml",
     }
   ) : ""

@@ -12,11 +12,11 @@ locals {
   # resolvconf file with all nameservers inside it
   interfaced_nameservers_file_path = "/etc/resolvconf/resolv.conf.d/head"
   interfaced_nameservers_list      = compact(flatten([for network_settings in var.private_networks_settings : network_settings.nameservers.addresses]))
-  interfaced_nameservers_file      = length(local.nameservers_list) == 0 ? "" : templatefile(
+  interfaced_nameservers_file      = length(local.interfaced_nameservers_list) == 0 ? "" : templatefile(
     "${path.module}/config_templates/interfacesd/nameservers_file.tmpl",
     {
-      nameservers_list = local.nameservers_list
-      nameservers_file_path = local.nameservers_file_path
+      nameservers_list = local.interfaced_nameservers_list
+      nameservers_file_path = local.interfaced_nameservers_file_path
     }
   )
 
