@@ -25,7 +25,6 @@ package_update: true
 packages:
 - resolvconf
 %{ endif ~}
-
 %{ if additional_hosts_entries_file_base64 != "" || length(additional_write_files) > 0 || private_network_file_base64 != "" || length(additional_run_commands) > 0 ~}
 write_files:
 %{ if private_network_file_base64 != "" ~}
