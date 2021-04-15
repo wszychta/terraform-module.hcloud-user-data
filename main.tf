@@ -9,7 +9,7 @@ locals {
       "centos-8"
     ]
     netplan = [
-      "Ubuntu-20.04"
+      "ubuntu-20.04"
     ]
   }
   
