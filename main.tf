@@ -2,6 +2,7 @@ locals {
   supported_os_map = {
     interfaced = [
       "debian-10",
+      "debian-9",
     ],
     nm = [
       "fedora-33",
@@ -9,7 +10,8 @@ locals {
       "centos-8"
     ]
     netplan = [
-      "ubuntu-20.04"
+      "ubuntu-20.04",
+      "ubuntu-18.04"
     ]
   }
   
