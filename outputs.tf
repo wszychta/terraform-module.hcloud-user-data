@@ -11,11 +11,11 @@ output "result_hosts_file" {
 # NM outputs
 
 output "result_nm_file" {
-  value = local.nm_network_setup_script
+  value = local.nm_cloud_config_file
 }
 
 output "result_nm_network_file" {
-  value = local.nm_network_setup_script_path
+  value = local.nm_network_setup_script
 }
 
 # interfaces.d outputs
