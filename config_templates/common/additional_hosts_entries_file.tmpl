@@ -1,0 +1,4 @@
+# Host entries added on first boot
+%{ for entry in additional_hosts_entries ~}
+${ entry.ip } ${ join(" ", entry.hostnames) }
+%{ endfor }

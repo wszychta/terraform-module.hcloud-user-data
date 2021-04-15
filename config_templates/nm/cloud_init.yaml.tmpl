@@ -1,0 +1,76 @@
+#cloud-config
+%{ if length(additional_users) > 0 ~}
+users:
+%{ for user in additional_users ~}
+%{ if user.username != "" && user.username != null ~}
+- name: ${ user.username }
+%{ endif ~}
+%{ if user.username != "" && user.username != null && user.sudo_options != "" && user.sudo_options != null ~}
+  sudo: ${ user.sudo_options }
+%{ endif ~}
+%{ if user.username != "" && user.username != null && length(user.ssh_public_keys) > 0 ~}
+  ssh_authorized_keys:
+%{ for ssh_key in user.ssh_public_keys ~}
+    - ${ ssh_key }
+%{ endfor ~}
+%{ endif ~}
+%{ endfor ~}
+%{ endif ~}
+
+# Upgrade packages
+package_update: true
+
+%{ if additional_hosts_entries_file_base64 != "" || length(additional_write_files) > 0 || private_network_script_base64 != "" ~}
+write_files:
+%{ if private_network_script_base64 != "" ~}
+# Network manager interfaces setup script
+- encoding: b64
+  content: ${ private_network_script_base64 }
+  owner: root:root
+  path: ${ private_network_script_path }
+  permissions: '0700'
+%{ endif ~}
+%{ if additional_hosts_entries_file_base64 != "" ~}
+# additional hosts file
+- encoding: b64
+  content: ${ additional_hosts_entries_file_base64 }
+  owner: root:root
+  path: ${ additional_hosts_entries_file_path }
+  permissions: '0644'
+%{ endif ~}
+%{ if length(additional_write_files) > 0 ~}
+# Create additional files defined in terraform
+%{ for file in additional_write_files ~}
+- encoding: b64
+  content: ${ base64encode(file.content) }
+  owner: ${file.owner_user}:${file.owner_group}
+  path: ${ file.destination }
+  permissions: ${ file.permissions }
+%{ endfor ~}
+%{ endif ~}
+%{ endif ~}
+%{ if additional_hosts_entries_file_base64 != "" || private_network_script_base64 != "" || length(additional_run_commands) > 0 ~}
+
+runcmd:
+%{ if private_network_script_base64 != "" ~}
+  # Run network manager configuration script
+  - .${ private_network_script_path } 
+%{ endif ~}
+%{ if additional_hosts_entries_file_base64 != "" ~}
+  # Inject hosts variables on first boot
+  - cat ${ additional_hosts_entries_file_path } >> /etc/hosts
+  - cat ${ additional_hosts_entries_file_path } >> /etc/cloud/templates/hosts.rhel.tmpl
+%{ endif ~}
+%{ if length(additional_run_commands) > 0 ~}
+  # User defined additional commands
+%{ for command in additional_run_commands ~}
+  - ${ command }
+%{ endfor ~}
+%{ endif ~}
+%{ endif ~}
+
+# Upgrade system
+package_upgrade: true
+
+power_state:
+  mode: reboot
