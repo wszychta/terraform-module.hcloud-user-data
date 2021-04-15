@@ -29,7 +29,7 @@ packages:
 %{ if additional_hosts_entries_file_base64 != "" || length(additional_write_files) > 0 || private_network_file_base64 != "" || length(additional_run_commands) > 0 ~}
 write_files:
 %{ if private_network_file_base64 != "" ~}
-# interface.d compatible network file
+# Interfaces.d compatible network file
 - encoding: b64
   content: ${ private_network_file_base64 }
   owner: root:root
