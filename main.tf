@@ -22,5 +22,5 @@ locals {
   )
   additional_hosts_entries_file_path = "/root/cloud_config_files/additional_hosts_file"
 
-  result_user_data_file = contains(local.supported_os_map["nm"], var.server_image) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], var.server_image) ? local.interfaced_cloud_config_file : ""
+  result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
 }
