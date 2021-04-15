@@ -3,6 +3,7 @@ locals {
     interfaced = [
       "debian-10",
       "debian-9",
+      "ubuntu-18.04"
     ],
     nm = [
       "fedora-33",
@@ -11,7 +12,6 @@ locals {
     ]
     netplan = [
       "ubuntu-20.04",
-      "ubuntu-18.04"
     ]
   }
   
