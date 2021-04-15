@@ -3,7 +3,7 @@ auto %{ if "cpx" == regex("[a-z]+",server_type) }enp${sum([7,index(private_netwo
 iface %{ if "cpx" == regex("[a-z]+",server_type) }enp${sum([7,index(private_networks_settings, network_settings)])}s0%{ else }ens1${index(private_networks_settings, network_settings)}%{ endif } inet dhcp
 %{ if length(network_settings.nameservers.search) > 0 ~}
     dns-search ${join(" ",network_settings.nameservers.search)}
-%{ endif }
+%{ endif ~}
 %{ if length(network_settings.nameservers.addresses) > 0 ~}
     dns-nameservers ${join(" ",network_settings.nameservers.addresses)}
 %{ endif ~}
