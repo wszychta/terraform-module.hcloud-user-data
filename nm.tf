@@ -32,6 +32,7 @@ locals {
     {
       private_network_script_base64         = length(var.private_networks_settings) > 0 ? base64encode(local.nm_network_setup_script) : "",
       private_network_script_path           = local.nm_network_setup_script_path,
+      server_image                          = var.server_image,
       additional_users                      = var.additional_users,
       additional_hosts_entries_file_base64  = length(var.additional_hosts_entries) > 0 ? base64encode(local.additional_hosts_entries_file) : "",
       additional_hosts_entries_file_path    = local.additional_hosts_entries_file_path
