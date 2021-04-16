@@ -5,10 +5,43 @@
 All actions taken to create user-data file are based on [Hetzner server configuration documentation](https://docs.hetzner.com/cloud/networks/server-configuration/), [Hetzner static ip documentation](https://docs.hetzner.com/cloud/servers/static-configuration/), [cloud-init documentation](https://cloudinit.readthedocs.io/en/latest/) and my own experience/experiments.
 
 ## Supported features
-- Generating private networks configuration for instance after initial boot ( only dhcp no support for static interface configuration )
+- Generating private networks configuration for instance after initial boot ( only dhcp - no support for static interface configuration ). This module use three different ways of managing networks
+  - `interfaces.d` config file - for images:
+    - `ubuntu-18.04`
+    - `debian-9`
+    - `debian-10`
+  - `Netplan` config file - for images:
+    - `ubuntu-20.04`
+  - `Network manager` - for images:
+    - `fedora-33`
+    - `centos-7`
+    - `centos-8`
 - Adding additional users with ssh keys and `sudo` configuration
+- Writing additional entries in `/etc/hosts` file
 - Writing additional files on instance (ex. cron jobs)
 - Running additional shell commands on initial boot (ex. docker instalation)
+
+### Working Features for each image
+
+| System image | Routing Configuration | DNS ip addresses | DNS search domains | `/etc/hosts` file writing | Creating additional users | Writing additional Files | Running additional commands |
+|:------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|
+| Ubuntu 18.04 | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+| Ubuntu 20.04 | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         |
+| Fedora 33    | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         |
+| Debian 9     | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+| Debian 10    | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+| Centos 7     | YES                   | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+| Centos 8     | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+
+Please take a look at [Known Issues](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#known-issues) section to read why some of the features are not working on described images.
+
+## Tested vms configuration
+
+I have tested this module on below instances types:
+- CX11
+- CPX11
+
+This module should also work on bigger machines based on avaliable documentation.
 
 ## Usage example
 
@@ -67,23 +100,19 @@ module "cloud_config_file" {
 }
 ```
 
-## List of tested vms configuration:
-
-| Hardware Configuration | Ubuntu 18.04 | Ubuntu 20.04 | Fedora 33 | Debian 9  | Debian 10 | Centos 7  | Centos 8  |
-|:----------------------:|:------------:|:------------:|:---------:|:---------:|:---------:|:---------:|:---------:|
-| CX11                   | Partially    | YES          | YES       | Partially | YES       | Partially | Partially |
-| CPX11                  | Partially    | YES          | YES       | Partially | YES       | Partially | Partially |
-
-I will not test this module on bigger machines, but it should work fine also on them.
-
 ## Known Issues
 
-### `/ect/resolv.conf` - DNS search option doesn't work
+### DNS search option doesn't work
 affected images:
-- `centos-7`
 - `ubuntu-18.04`
 - `debian-9`
 - `debian-10`
+
+### All DNS settings not working
+The libc resolver may not support more than 3 nameservers and by default Hetzner is configuring three nameservers
+
+affected images:
+- `centos-7`
 
 ### Networking part not working
 For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration script in `/root/cloud_config_files/network_setup_script.sh`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
@@ -130,12 +159,14 @@ Also I have decided to not work on images:
 - `centos-8` - Because of the problem described in Known Issues part
 - `ubuntu-16.04` and `fedora-32` - Because they will not be avaliable on Hetzner cloud after <b>June 24 2021</b>
 
+So if somebody knows how to fix any of described issues please look into [Developing](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#developing) section
+
 ### Developing
 If you have and idea how to improve this module please:
 1. Fork this module from `master` branch
 2. Work on your changes inside your fork
 3. Create Pull Request on this respository.
-4. In my spare time I will look at your changes
+4. In my spare time I will look at proposed changes
 
 ## Copyright 
 Copyright © 2021 Wojciech Szychta
