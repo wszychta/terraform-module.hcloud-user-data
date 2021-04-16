@@ -12,7 +12,7 @@ All actions taken to create user-data file are based on [Hetzner server configur
     - `debian-10`
   - `Netplan` config file - for images:
     - `ubuntu-20.04`
-  - `Network manager` - for images:
+  - `Network manager` script - for images:
     - `fedora-33`
     - `centos-7`
     - `centos-8`
@@ -20,18 +20,20 @@ All actions taken to create user-data file are based on [Hetzner server configur
 - Writing additional entries in `/etc/hosts` file
 - Writing additional files on instance (ex. cron jobs)
 - Running additional shell commands on initial boot (ex. docker instalation)
+- Upgrading all packages
+- Rebooting after finishing all cloud-init tasks
 
 ### Working Features for each image
 
-| System image | Routing Configuration | DNS ip addresses | DNS search domains | `/etc/hosts` file writing | Creating additional users | Writing additional Files | Running additional commands |
-|:------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|
-| Ubuntu 18.04 | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
-| Ubuntu 20.04 | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         |
-| Fedora 33    | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         |
-| Debian 9     | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
-| Debian 10    | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
-| Centos 7     | YES                   | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
-| Centos 8     | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         |
+| System image | Routing Configuration | DNS ip addresses | DNS search domains | `/etc/hosts` file writing | Creating additional users | Writing additional Files | Running additional commands | Upgrading packages | Rebooting instance |
+|:------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|:------------------:|:------------------:|
+| Ubuntu 18.04 | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         | YES                | YES                |
+| Ubuntu 20.04 | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         | YES                | YES                |
+| Fedora 33    | YES                   | YES              | YES                | YES                       | YES                       | YES                      | YES                         | YES                | YES                |
+| Debian 9     | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         | YES                | YES                |
+| Debian 10    | YES                   | YES              | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         | YES                | YES                |
+| Centos 7     | YES                   | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         | YES                | <b>NO</b>          |
+| Centos 8     | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | YES                       | YES                       | YES                      | YES                         | YES                | <b>NO</b>          |
 
 Please take a look at [Known Issues](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#known-issues) section to read why some of the features are not working on described images.
 
@@ -120,6 +122,13 @@ For some reasons Network manager is not able to manage Hetzner private networks 
 affected images:
 - `centos-8`
 
+### cloud-init reboot not working
+I checked that `power-state-change` module is enabled by default in `/etc/cloud/cloud.cfg`, but for some images cloud-init is not forcing reboot on machine. I don't know if this is bug in cloud-init, centos images or both in the same time.
+
+affected images:
+- `centos-7`
+- `centos-8`
+
 ## Variables
 
 | Variable name             | variable type | default value | Required variable | Description |
@@ -131,6 +140,8 @@ affected images:
 | additional_write_files    |<pre>list(object({<br>    content     = string<br>    owner_user  = string<br>    owner_group = string<br>    destination = string<br>    permissions = string<br>}))</pre>| `[]` | <b>No</b> | List of additional files to create on first boot.<br><b>Note:</b> inside `content` value please provide <u><i>plain text content of the file</i></u> (not the path to the file).<br>You can use terraform to generate file from template or to read existing file from local machine |
 | additional_hosts_entries  |<pre>list(object({<br>    ip        = string<br>    hostnames    = string<br>}))</pre>| `[]` | <b>No</b> | List of entries for `/etc/hosts` file. There is possibility to define multiple hostnames per single ip address |
 | additional_run_commands   | `list(string)` | `[]` | <b>No</b> | List of additional commands to run on boot |
+| upgrade_all_packages      | `bool` | `true` | <b>No</b> | Set to false when there is no need to upgrade packages on first boot |
+| reboot_instance           | `bool` | `true` | <b>No</b> | Set to false when there is no need for instance reboot after finishing cloud-init tasks |
 | yq_version                | `string` |`v4.6.3`| <b>No</b> | Version of yq script used for merging netplan script |
 | yq_binary                 | `string` |`yq_linux_amd64`| <b>No</b> | Binary of yq script used for merging netplan script |
 
@@ -156,7 +167,7 @@ Please use the [issues tab](https://github.com/wszychta/terraform-module.hcloud-
 I can't guarantee that I will work on every bug/feature, because this is my side project, but I will try to keep an eye on any created issue.
 Also I have decided to not work on images:
 - `ubuntu-18.04`, `centos-7`, `debian-9`, `debian-10` - Because I don't use described types of images
-- `centos-8` - Because of the problem described in Known Issues part
+- `centos-8` - Because of the problems described in [Known Issues](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#known-issues)
 - `ubuntu-16.04` and `fedora-32` - Because they will not be avaliable on Hetzner cloud after <b>June 24 2021</b>
 
 So if somebody knows how to fix any of described issues please look into [Developing](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#developing) section

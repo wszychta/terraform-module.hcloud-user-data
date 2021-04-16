@@ -81,11 +81,13 @@ runcmd:
 %{ endfor ~}
 %{ endif ~}
 %{ endif ~}
-
+%{ if upgrade_all_packages == true ~}
 # Upgrade system
 package_upgrade: true
-
+%{ endif ~}
+%{ if reboot_instance == true ~}
 power_state:
   mode: reboot
   delay: "now"
   message: Reboot the machine after successfull cloud-init run with custom cloud-config file
+%{ endif ~}

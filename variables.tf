@@ -56,6 +56,16 @@ variable "additional_run_commands" {
   default = []
 }
 
+variable "upgrade_all_packages" {
+  type = bool
+  default = true
+}
+
+variable "reboot_instance" {
+  type = bool
+  default = true
+}
+
 variable "yq_version" {
   type = string
   default = "v4.6.3"
