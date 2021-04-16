@@ -52,7 +52,7 @@ write_files:
 %{ if additional_hosts_entries_file_base64 != "" || private_network_script_base64 != "" || length(additional_run_commands) > 0 ~}
 
 runcmd:
-%{ if private_network_script_base64 != "" && replace(server_image, "centos-8", "") != server_image  ~}
+%{ if private_network_script_base64 != "" ~}
   # Run network manager configuration script
   - .${ private_network_script_path } 
 %{ endif ~}
