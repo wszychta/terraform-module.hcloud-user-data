@@ -69,21 +69,27 @@ module "cloud_config_file" {
 
 ## List of tested vms configuration:
 
-| Hardware Configuration | Ubuntu 18.04 | Ubuntu 20.04 | Fedora 33 | Debian 9 | Debian 10 | Centos 7  | Centos 8  |
-|:----------------------:|:------------:|:------------:|:---------:|:--------:|:---------:|:---------:|:---------:|
-| CX11                   | Partially    | YES          | YES       | YES      | YES       | Partially | Partially |
-| CPX11                  | Partially    | YES          | YES       | YES      | YES       | Partially | Partially |
+| Hardware Configuration | Ubuntu 18.04 | Ubuntu 20.04 | Fedora 33 | Debian 9  | Debian 10 | Centos 7  | Centos 8  |
+|:----------------------:|:------------:|:------------:|:---------:|:---------:|:---------:|:---------:|:---------:|
+| CX11                   | Partially    | YES          | YES       | Partially | YES       | Partially | Partially |
+| CPX11                  | Partially    | YES          | YES       | Partially | YES       | Partially | Partially |
 
 I will not test this module on bigger machines, but it should work fine also on them.
 
 ## Known Issues
 
-### Ubuntu 18.04
-- `/ect/resolv.conf` - DNS search option doesn't work for some unknown to me reasons.
-### Centos 7
-- `/ect/resolv.conf` - DNS search option doesn't work for some unknown to me reasons.
-### Centos 8
-- <b>Networking part is not working at all.</b> For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration script in `/root/cloud_config_files/network_setup_script.sh`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
+### `/ect/resolv.conf` - DNS search option doesn't work
+affected images:
+- `centos-7`
+- `ubuntu-18.04`
+- `debian-9`
+- `debian-10`
+
+### Networking part not working
+For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration script in `/root/cloud_config_files/network_setup_script.sh`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
+
+affected images:
+- `centos-8`
 
 ## Variables
 
@@ -120,7 +126,7 @@ Please use the [issues tab](https://github.com/wszychta/terraform-module.hcloud-
 
 I can't guarantee that I will work on every bug/feature, because this is my side project, but I will try to keep an eye on any created issue.
 Also I have decided to not work on images:
-- `ubuntu-18.04` and `centos-7` - Because I don't use both types of images
+- `ubuntu-18.04`, `centos-7`, `debian-9`, `debian-10` - Because I don't use described types of images
 - `centos-8` - Because of the problem described in Known Issues part
 - `ubuntu-16.04` and `fedora-32` - Because they will not be avaliable on Hetzner cloud after <b>June 24 2021</b>
 
