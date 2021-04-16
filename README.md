@@ -5,7 +5,7 @@
 All actions taken to create user-data file are based on [Hetzner server configuration documentation](https://docs.hetzner.com/cloud/networks/server-configuration/), [Hetzner static ip documentation](https://docs.hetzner.com/cloud/servers/static-configuration/), [cloud-init documentation](https://cloudinit.readthedocs.io/en/latest/) and my own experience/experiments.
 
 ## Supported features
-- Generating private networks configuration for instance after initial boot only with dhcp ( no support for static interface configuration )
+- Generating private networks configuration for instance after initial boot ( only dhcp no support for static interface configuration )
 - Adding additional users with ssh keys and `sudo` configuration
 - Writing additional files on instance (ex. cron jobs)
 - Running additional shell commands on initial boot (ex. docker instalation)
