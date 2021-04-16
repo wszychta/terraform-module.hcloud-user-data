@@ -1,0 +1,6 @@
+# File generated with terraform user-data module.
+# Manual modifications will be removed after reboot
+# If you want data to persist please edit file ${ nameservers_file_path }
+%{ for address in nameservers_list ~}
+nameserver ${ address }
+%{ endfor ~}

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Get yq
+wget https://github.com/mikefarah/yq/releases/download/${yq_version}/${yq_binary} -O /usr/bin/yq && chmod +x /usr/bin/yq
+yq -i eval-all 'select(fi == 0) * select(filename == "${ private_network_file_path }")' ${ netplan_file_path }  ${ private_network_file_path }

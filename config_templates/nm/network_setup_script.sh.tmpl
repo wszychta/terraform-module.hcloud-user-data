@@ -1,0 +1,16 @@
+#/bin/bash
+%{ for network_settings in private_networks_settings ~}
+%{ if length(network_settings.routes) > 0  }
+%{ for gateway_ip, routes in network_settings.routes ~}
+%{ for route in routes ~}
+nmcli connection modify "Wired connection ${sum([1,index(private_networks_settings, network_settings)])}" +ipv4.routes "${ route } ${ gateway_ip }"
+%{ endfor ~}
+%{ endfor ~}
+%{ endif ~}
+%{ if length(network_settings.nameservers.addresses) > 0  ~}
+nmcli connection modify "Wired connection ${sum([1,index(private_networks_settings, network_settings)])}" ipv4.dns "${ join(",",network_settings.nameservers.addresses) }"
+%{ endif ~}
+%{ if length(network_settings.nameservers.search) > 0  ~}
+nmcli connection modify "Wired connection ${sum([1,index(private_networks_settings, network_settings)])}" ipv4.dns-search "${ join(",",network_settings.nameservers.search) }"
+%{ endif ~}
+%{ endfor ~}
