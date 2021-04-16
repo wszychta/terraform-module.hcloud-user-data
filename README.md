@@ -12,12 +12,12 @@ All actions taken to create user-data file are based on [Hetzner server configur
 
 ## Usage example
 
-Example for Debian/Ubuntu with docker installation:
+Example for Debian/Ubuntu with few packages installation:
 ```
 module "cloud_config_file" {
   source            = "git::git@github.com:wszychta/terraform-module.hcloud-user-data?ref=tags/1.0.0"
-  server_type       = local.server_type
-  server_image      = local.server_image
+  server_type       = "cpx11"
+  server_image      = "ubuntu-20.04"
   additional_users  = [
     {
       username = "local"
@@ -62,11 +62,7 @@ module "cloud_config_file" {
     }
   ]
   additional_run_commands = [
-    "apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release",
-    "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg",
-    "echo \"deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | tee /etc/apt/sources.list.d/docker.list > /dev/null",
-    "apt-get update; apt-get install -y docker-ce docker-ce-cli containerd.io",
-    "systemctl enable docker"
+    "apt-get install -y htop telnet nano"
   ]
 }
 ```
