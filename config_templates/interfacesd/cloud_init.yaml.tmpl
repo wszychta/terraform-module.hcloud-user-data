@@ -18,9 +18,10 @@ users:
 %{ endif ~}
 
 timezone: ${ timezone }
-
+%{ if upgrade_all_packages = true ~}
 # Upgrade packages
 package_update: true
+%{ endif ~}
 
 %{ if nameservers_file_base64 != "" ~}
 # Install required packges
