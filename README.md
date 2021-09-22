@@ -131,19 +131,20 @@ affected images:
 
 ## Variables
 
-| Variable name             | variable type  | default value  | Required variable | Description |
-|:-------------------------:|:---------------|:--------------:|:-----------------:|:-----------:|
-| server_type               | `string`       | `empty`        | <b>Yes</b>        | Hetzner server type (ex. cpx11) |
-| server_image              | `string`       | `empty`        | <b>Yes</b>        | Instance system image |
+| Variable name             | variable type  | default value   | Required variable | Description |
+|:-------------------------:|:---------------|:---------------:|:-----------------:|:-----------:|
+| server_type               | `string`       | `empty`         | <b>Yes</b>        | Hetzner server type (ex. cpx11) |
+| server_image              | `string`       | `empty`         | <b>Yes</b>        | Instance system image |
 | additional_users          |<pre>list(object({<br>    username        = string<br>    sudo_options    = string<br>    ssh_public_keys = list(string)<br>}))</pre>| `[]` | <b>No</b> | List of additional users with their options |
 | private_networks_settings |<pre>list(object({<br>    routes        = map(list(string))<br>    nameservers   = object({<br>      addresses   = list(string)<br>      search      = list(string)<br>    })<br>})</pre>| `[]` | <b>No</b> | List of configuration for all private networks.<br><b>Note:</b> Routes are defined as <b>map(list(string))</b> where key is a <b>gateway ip address</b> and list contains all <b> network destinations</b>.<br><b>Example:</b> `"192.168.0.1" = ["192.168.0.0/24","192.168.1.0/24"]` |
 | additional_write_files    |<pre>list(object({<br>    content     = string<br>    owner_user  = string<br>    owner_group = string<br>    destination = string<br>    permissions = string<br>}))</pre>| `[]` | <b>No</b> | List of additional files to create on first boot.<br><b>Note:</b> inside `content` value please provide <u><i>plain text content of the file</i></u> (not the path to the file).<br>You can use terraform to generate file from template or to read existing file from local machine |
 | additional_hosts_entries  |<pre>list(object({<br>    ip        = string<br>    hostnames    = string<br>}))</pre>| `[]` | <b>No</b> | List of entries for `/etc/hosts` file. There is possibility to define multiple hostnames per single ip address |
-| additional_run_commands   | `list(string)` | `[]`           | <b>No</b>         | List of additional commands to run on boot |
-| upgrade_all_packages      | `bool`         | `true`         | <b>No</b>         | Set to false when there is no need to upgrade packages on first boot |
-| reboot_instance           | `bool`         | `true`         | <b>No</b>         | Set to false when there is no need for instance reboot after finishing cloud-init tasks |
-| yq_version                | `string`       |`v4.6.3`        | <b>No</b>         | Version of yq script used for merging netplan script |
-| yq_binary                 | `string`       |`yq_linux_amd64`| <b>No</b>         | Binary of yq script used for merging netplan script |
+| additional_run_commands   | `list(string)` | `[]`            | <b>No</b>         | List of additional commands to run on boot |
+| timezone                  | `string`       | `Europe/Berlin` | <b>No</b>         | Timezone for the VM |
+| upgrade_all_packages      | `bool`         | `true`          | <b>No</b>         | Set to false when there is no need to upgrade packages on first boot |
+| reboot_instance           | `bool`         | `true`          | <b>No</b>         | Set to false when there is no need for instance reboot after finishing cloud-init tasks |
+| yq_version                | `string`       |`v4.6.3`         | <b>No</b>         | Version of yq script used for merging netplan script |
+| yq_binary                 | `string`       |`yq_linux_amd64` | <b>No</b>         | Binary of yq script used for merging netplan script |
 
 ## Outputs
 
