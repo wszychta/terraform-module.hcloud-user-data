@@ -66,6 +66,11 @@ variable "reboot_instance" {
   default = true
 }
 
+variable "timezone" {
+  type = string
+  default = "Europe/Berlin"
+}
+
 variable "yq_version" {
   type = string
   default = "v4.6.3"

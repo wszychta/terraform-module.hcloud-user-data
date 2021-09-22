@@ -38,6 +38,7 @@ locals {
       additional_hosts_entries_file_path    = local.additional_hosts_entries_file_path
       additional_write_files                = var.additional_write_files,
       additional_run_commands               = var.additional_run_commands,
+      timezone                              = var.timezone,
       upgrade_all_packages                  = var.upgrade_all_packages,
       reboot_instance                       = var.reboot_instance
     }
