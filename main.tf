@@ -44,7 +44,7 @@ locals {
   cloud_config_files_map = {
     "debian-9" = {
       "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.interfaced_cloud_config_file
+      "cpx" = local.netplan_cloud_config_file
     }
     "debian-10" = {
       "cx"  = local.interfaced_cloud_config_file
@@ -52,7 +52,7 @@ locals {
     }
     "debian-11" = {
       "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.interfaced_cloud_config_file
+      "cpx" = local.netplan_cloud_config_file
     }
     "ubuntu-20.04" = {
       "cx"  = local.netplan_cloud_config_file
