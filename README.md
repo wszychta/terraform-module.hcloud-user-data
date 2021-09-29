@@ -20,6 +20,7 @@ All actions taken to create user-data file are based on [Hetzner server configur
 - Writing additional entries in `/etc/hosts` file
 - Writing additional files on instance (ex. cron jobs)
 - Running additional shell commands on initial boot (ex. docker instalation)
+- Setting instance Timezone
 - Upgrading all packages
 - Rebooting after finishing all cloud-init tasks
 
@@ -43,7 +44,11 @@ I have tested this module on below instances types:
 - CX11
 - CPX11
 
-This module should also work on bigger machines based on avaliable documentation.
+<b>This module should also work on the rest of standard machines with Local SSD based on avaliable documentation.</b>
+
+This module will not work on:
+- CEPH instances (CXxx-CEPH)
+- Dedicated instances (CCXxx)
 
 ## Usage example
 
@@ -172,6 +177,10 @@ Also I have decided to not work on images:
 - `ubuntu-16.04` and `fedora-32` - Because they will not be avaliable on Hetzner cloud after <b>June 24 2021</b>
 
 So if somebody knows how to fix any of described issues please look into [Developing](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#developing) section
+
+### Supporting development
+If you like this module and you haven't started working in Hetzner Cloud you can use my [PERSONAL REFERRAL LINK](https://hetzner.cloud/?ref=YQhSB5WwTzqt) to start working with Hetzner cloud.
+You will get 20 Euro on start and after spending additional 10 Euro I will get the same amount of money.
 
 ### Developing
 If you have and idea how to improve this module please:

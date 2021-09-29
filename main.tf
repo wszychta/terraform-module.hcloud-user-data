@@ -42,36 +42,36 @@ locals {
   additional_hosts_entries_file_path = "/root/cloud_config_files/additional_hosts_file"
 
   cloud_config_files_map = {
-    debian-9 = {
-      cx  = local.interfaced_cloud_config_file
-      cpx = local.interfaced_cloud_config_file
+    "debian-9" = {
+      "cx"  = local.interfaced_cloud_config_file
+      "cpx" = local.interfaced_cloud_config_file
     }
-    debian-10 = {
-      cx  = local.netplan_cloud_config_file
-      cpx = local.interfaced_cloud_config_file
+    "debian-10" = {
+      "cx"  = local.netplan_cloud_config_file
+      "cpx" = local.interfaced_cloud_config_file
     }
-    debian-11 = {
-      cx  = local.interfaced_cloud_config_file
-      cpx = local.interfaced_cloud_config_file
+    "debian-11" = {
+      "cx"  = local.interfaced_cloud_config_file
+      "cpx" = local.interfaced_cloud_config_file
     }
-    ubuntu-20.04 = {
-      cx  = local.netplan_cloud_config_file
-      cpx = local.netplan_cloud_config_file
+    "ubuntu-20.04" = {
+      "cx"  = local.netplan_cloud_config_file
+      "cpx" = local.netplan_cloud_config_file
     }
-    fedora-33 = {
-      cx  = local.nm_cloud_config_file
-      cpx = local.nm_cloud_config_file
+    "fedora-33" = {
+      "cx"  = local.nm_cloud_config_file
+      "cpx" = local.nm_cloud_config_file
     }
-    centos-7 = {
-      cx  = local.nm_cloud_config_file
-      cpx = local.nm_cloud_config_file
+    "centos-7" = {
+      "cx"  = local.nm_cloud_config_file
+      "cpx" = local.nm_cloud_config_file
     }
-    centos-8 = {
-      cx  = local.nm_cloud_config_file
-      cpx = local.nm_cloud_config_file
+    "centos-8" = {
+      "cx"  = local.nm_cloud_config_file
+      "cpx" = local.nm_cloud_config_file
     }
   }
 
   # result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
-  result_user_data_file = local.cloud_config_files_map[var.server_image][replace(var.server_type, "/[1-9]", "")]
+  result_user_data_file = local.cloud_config_files_map[var.server_image][replace(var.server_type, "/[1-9]+", "")]
 }
