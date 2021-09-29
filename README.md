@@ -10,8 +10,12 @@ All actions taken to create user-data file are based on [Hetzner server configur
     - `ubuntu-18.04`
     - `debian-9`
     - `debian-10`
+    - `debian-11`
   - `Netplan` config file - for images:
     - `ubuntu-20.04`
+    - `debian-9`
+    - `debian-10`
+    - `debian-11`
   - `Network manager` script - for images:
     - `fedora-33`
     - `centos-7`
@@ -31,8 +35,9 @@ All actions taken to create user-data file are based on [Hetzner server configur
 | Ubuntu 18.04 | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Ubuntu 20.04 | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Fedora 34    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Debian 9     | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Debian 10    | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
+| Debian 9     | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
+| Debian 10    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
+| Debian 11    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Centos 7     | Yes                   | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
 | Centos 8     | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
 
@@ -112,8 +117,6 @@ module "cloud_config_file" {
 ### DNS search option doesn't work
 affected images:
 - `ubuntu-18.04`
-- `debian-9`
-- `debian-10`
 
 ### All DNS settings not working
 The libc resolver may not support more than 3 nameservers and by default Hetzner is configuring three nameservers with cloud-init
