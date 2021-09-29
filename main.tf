@@ -58,7 +58,7 @@ locals {
       "cx"  = local.netplan_cloud_config_file
       "cpx" = local.netplan_cloud_config_file
     }
-    "fedora-33" = {
+    "fedora-34" = {
       "cx"  = local.nm_cloud_config_file
       "cpx" = local.nm_cloud_config_file
     }

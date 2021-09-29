@@ -2,6 +2,10 @@
 ## Main changes
 - Add possibility to define timezone with cloudinit on boot
 - This module doesn't force packages upgrade on first boot if variable `upgrade_all_packages` was set to false
+- Remove unsupported images:
+    - fedora-33
+- Add new supported images:
+    - fedora-34
 
 # 1.0.0
 ## Main changes
