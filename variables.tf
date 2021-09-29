@@ -1,11 +1,11 @@
 variable "server_type" {
-  type      = string
-  default   = ""
+  type    = string
+  default = ""
 }
 
 variable "server_image" {
-  type      = string
-  default   = ""
+  type    = string
+  default = ""
 }
 
 variable "additional_users" {
@@ -20,11 +20,11 @@ variable "additional_users" {
 variable "private_networks_settings" {
   type = list(object(
     {
-      routes                = map(list(string))
-      nameservers           = object(
+      routes = map(list(string))
+      nameservers = object(
         {
-          addresses           = list(string)
-          search              = list(string)
+          addresses = list(string)
+          search    = list(string)
         }
       )
     }
@@ -52,31 +52,31 @@ variable "additional_hosts_entries" {
 }
 
 variable "additional_run_commands" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "upgrade_all_packages" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "reboot_instance" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "timezone" {
-  type = string
+  type    = string
   default = "Europe/Berlin"
 }
 
 variable "yq_version" {
-  type = string
+  type    = string
   default = "v4.6.3"
 }
 
 variable "yq_binary" {
-  type = string
+  type    = string
   default = "yq_linux_amd64"
 }
