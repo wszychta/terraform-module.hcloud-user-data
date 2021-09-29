@@ -73,7 +73,7 @@ locals {
   }
 
   # result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
-  server_type_letters_only = replace(var.server_type, "/[1-9]+", "")
+  server_type_letters_only = replace(var.server_type, "/[1-9]+/", "")
   system_user_data_files = local.cloud_config_files_map[var.server_image] 
   result_user_data_file = local.system_user_data_files[local.server_type_letters_only]
 }
