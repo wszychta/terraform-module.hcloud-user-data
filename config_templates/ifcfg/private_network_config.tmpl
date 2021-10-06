@@ -1,0 +1,15 @@
+DEVICE=${device_id}
+BOOTPROTO=dhcp
+ONBOOT=yes
+%{ if length(nameservers_addresses) == 1 ~}
+PEERDNS=no
+DNS1=${nameservers_addresses[0]}
+%{ endif ~}
+%{ if length(nameservers_addresses) == 2 ~}
+PEERDNS=no
+DNS1=${nameservers_addresses[0]}
+DNS2=${nameservers_addresses[1]}
+%{ endif ~}
+%{ if search_domains != "" ~}
+DOMAIN="${ search_domains }"
+%{ endif ~}

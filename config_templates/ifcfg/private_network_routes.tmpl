@@ -1,0 +1,5 @@
+%{ for gateway,networks in routes ~}
+%{ for network in networks ~}
+${network} via ${gateway} dev ${device_id}
+%{ endfor ~}
+%{ endfor ~}
