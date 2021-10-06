@@ -18,23 +18,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 locals {
   ifcfg_network_root_directory = "/etc/sysconfig/network-scripts"
 
-  ifcfg_network_config_files = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : 
+  ifcfg_network_config_files = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings :
     {
-      "device_id" = "enp${sum(7,index(var.private_networks_settings, net_config))}s0"
+      "device_id" = "enp${sum([7, index(var.private_networks_settings, net_config)])}s0"
       "ifcfg" = base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_config.tmpl",
         {
-          server_type               = var.server_type
-          device_id                        = "enp${sum(7,index(var.private_networks_settings, net_config))}s0"
-          nameservers_addresses     = length(net_config.nameservers.addresses) == 0 ? [] : length(net_config.nameservers.addresses) == 1 ? slice(net_config.nameservers.addresses,0,1) : slice(net_config.nameservers.addresses,0,2)
-          search_domains            = length(net_config.nameservers.search) == 0 ? "" : join(" ", net_config.nameservers.search)
+          server_type           = var.server_type
+          device_id             = "enp${sum([7, index(var.private_networks_settings, net_config)])}s0"
+          nameservers_addresses = length(net_config.nameservers.addresses) == 0 ? [] : length(net_config.nameservers.addresses) == 1 ? slice(net_config.nameservers.addresses, 0, 1) : slice(net_config.nameservers.addresses, 0, 2)
+          search_domains        = length(net_config.nameservers.search) == 0 ? "" : join(" ", net_config.nameservers.search)
         }
       ))
       "routes" = length(net_config.routes) > 0 ? base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_routes.tmpl",
         {
-          device_id     = "enp${sum(7,index(var.private_networks_settings, net_config))}s0"
-          routes = net_config.routes
+          device_id = "enp${sum([7, index(var.private_networks_settings, net_config)])}s0"
+          routes    = net_config.routes
         }
       )) : ""
     }
