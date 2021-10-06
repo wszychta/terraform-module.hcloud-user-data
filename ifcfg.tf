@@ -42,7 +42,7 @@ locals {
 
   # Cloud config final file output
   ifcfg_cloud_config_file = templatefile(
-    "${path.module}/config_templates/nm/cloud_init.yaml.tmpl",
+    "${path.module}/config_templates/ifcfg/cloud_init.yaml.tmpl",
     {
       ifcfg_network_root_directory         = local.ifcfg_network_root_directory
       ifcfg_network_config_files           = local.ifcfg_network_config_files
