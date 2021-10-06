@@ -72,7 +72,7 @@ runcmd:
 # Upgrade system
 package_upgrade: true
 %{ endif ~}
-%{ if reboot_instance == true ~}
+%{ if reboot_instance == true || upgrade_all_packages == true || private_network_script_base64 != "" ~}
 power_state:
   mode: reboot
   delay: "now"

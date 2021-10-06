@@ -25,7 +25,7 @@ timezone: ${ timezone }
 packages:
 - resolvconf
 %{ endif ~}
-%{ if additional_hosts_entries_file_base64 != "" || length(additional_write_files) > 0 || private_network_file_base64 != "" || length(additional_run_commands) > 0 ~}
+%{ if additional_hosts_entries_file_base64 != "" || length(additional_write_files) > 0 || private_network_file_base64 != "" || nameservers_file_base64 != "" || length(additional_run_commands) > 0 ~}
 write_files:
 %{ if private_network_file_base64 != "" ~}
 # Interfaces.d compatible network file
@@ -62,7 +62,7 @@ write_files:
 %{ endfor ~}
 %{ endif ~}
 %{ endif ~}
-%{ if additional_hosts_entries_file_base64 != "" || private_network_file_base64 != "" ~}
+%{ if additional_hosts_entries_file_base64 != "" || nameservers_file_base64 != "" || length(additional_run_commands) > 0 ~}
 
 runcmd:
 %{ if nameservers_file_base64 != "" ~}
@@ -85,7 +85,7 @@ runcmd:
 # Upgrade system
 package_upgrade: true
 %{ endif ~}
-%{ if reboot_instance == true ~}
+%{ if reboot_instance == true || upgrade_all_packages == true || private_network_file_base64 != "" ~}
 power_state:
   mode: reboot
   delay: "now"

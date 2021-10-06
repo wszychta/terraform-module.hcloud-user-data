@@ -74,7 +74,7 @@ runcmd:
 # Upgrade system
 package_upgrade: true
 %{ endif ~}
-%{ if reboot_instance == true ~}
+%{ if reboot_instance == true || upgrade_all_packages == true || length(ifcfg_network_config_files) > 0 ~}
 power_state:
   mode: reboot
   delay: "now"
