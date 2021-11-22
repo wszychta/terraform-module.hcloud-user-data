@@ -16,21 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 locals {
-  # supported_os_map = {
-  #   interfaced = [
-  #     "debian-10",
-  #     "debian-9",
-  #     "ubuntu-18.04"
-  #   ],
-  #   nm = [
-  #     "fedora-33",
-  #     "centos-7",
-  #     "centos-8"
-  #   ]
-  #   netplan = [
-  #     "ubuntu-20.04",
-  #   ]
-  # }
 
   # Configure additional hosts entries
   additional_hosts_entries_file = length(var.additional_hosts_entries) == 0 ? "" : templatefile(
@@ -79,8 +64,7 @@ locals {
       "cpx" = local.ifcfg_cloud_config_file
     }
   }
-
-  # result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
+  
   server_type_letters_only = replace(var.server_type, "/[1-9]+/", "")
   system_user_data_files   = local.cloud_config_files_map[var.server_image]
   result_user_data_file    = local.system_user_data_files[local.server_type_letters_only]
