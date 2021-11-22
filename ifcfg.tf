@@ -20,7 +20,7 @@ locals {
 
   ifcfg_network_config_files = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings :
     {
-      "device_id" = var.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
+      "device_id" = local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
       "ifcfg" = base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_config.tmpl",
         {
