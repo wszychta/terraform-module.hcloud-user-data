@@ -7,6 +7,7 @@
     - fedora-33
 - Add new supported images:
     - fedora-34
+    - rocky-8
 
 # 1.0.0
 ## Main changes
