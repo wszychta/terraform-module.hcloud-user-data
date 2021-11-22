@@ -20,7 +20,7 @@ locals {
 
   ifcfg_network_config_files = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings :
     {
-      "device_id" = "enp${sum([7, index(var.private_networks_settings, net_config)])}s0"
+      "device_id" = local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
       "ifcfg" = base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_config.tmpl",
         {

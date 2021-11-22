@@ -27,13 +27,13 @@ write_files:
   content: ${ network_config.ifcfg }
   owner: root:root
   path: ${ ifcfg_network_root_directory }/ifcfg-${ network_config.device_id }
-  permissions: '0700'
+  permissions: '0644'
 %{ if network_config.routes != "" ~}
 - encoding: b64
   content: ${ network_config.routes }
   owner: root:root
   path: ${ ifcfg_network_root_directory }/route-${ network_config.device_id }
-  permissions: '0700'
+  permissions: '0644'
 %{ endif ~}
 %{ endfor ~}
 %{ if additional_hosts_entries_file_base64 != "" ~}
