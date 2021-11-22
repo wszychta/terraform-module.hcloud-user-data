@@ -8,16 +8,6 @@ output "result_hosts_file" {
   value = local.additional_hosts_entries_file
 }
 
-# NM outputs
-
-output "result_nm_file" {
-  value = local.nm_cloud_config_file
-}
-
-output "result_nm_network_file" {
-  value = local.nm_network_setup_script
-}
-
 # interfaces.d outputs
 
 output "result_interfacesd_file" {
@@ -44,4 +34,10 @@ output "result_netplan_network_file" {
 
 output "result_netplan_network_merge_script" {
   value = local.netplan_network_merge_script
+}
+
+# test outputs
+
+output "result_netplan_network_merge_script" {
+  value = local.os_image_name_without_version
 }
