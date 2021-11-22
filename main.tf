@@ -70,6 +70,14 @@ locals {
       "cx"  = local.nm_cloud_config_file
       "cpx" = local.nm_cloud_config_file
     }
+    "centos-stream-8" = {
+      "cx"  = local.nm_cloud_config_file
+      "cpx" = local.nm_cloud_config_file
+    }
+    "rocky-8" = {
+      "cx"  = local.ifcfg_cloud_config_file
+      "cpx" = local.ifcfg_cloud_config_file
+    }
   }
 
   # result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
