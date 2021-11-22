@@ -38,6 +38,6 @@ output "result_netplan_network_merge_script" {
 
 # test outputs
 
-output "result_netplan_network_merge_script" {
+output "os_image_name_without_version" {
   value = local.os_image_name_without_version
 }
