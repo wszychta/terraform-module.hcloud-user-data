@@ -1,6 +1,7 @@
 DEVICE=${device_id}
 BOOTPROTO=dhcp
 ONBOOT=yes
+TYPE=Ethernet
 %{ if length(nameservers_addresses) == 1 ~}
 PEERDNS=no
 DNS1=${nameservers_addresses[0]}

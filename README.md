@@ -34,7 +34,7 @@ All actions taken to create user-data file are based on [Hetzner server configur
 |:---------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|:------------------:|:------------------:|
 | Ubuntu 18.04    | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Ubuntu 20.04    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Fedora 34       | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
+| Fedora 34       | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 9        | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 10       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 11       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
@@ -121,13 +121,14 @@ affected images:
 - `ubuntu-18.04`
 
 ### Networking part not working
-For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration files in `//etc/sysconfig/network-scripts/`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
+For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration files in `/etc/sysconfig/network-scripts/`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
 
 affected images:
 - `centos-7`
 - `centos-8`
 - `centos-stream-8`
 - `rocky-8`
+- `fedora-34`
 
 ### cloud-init reboot not working
 I checked that `power-state-change` module is enabled by default in `/etc/cloud/cloud.cfg`, but for some images cloud-init is not forcing reboot on machine. I don't know if this is bug in cloud-init, centos images or both in the same time.

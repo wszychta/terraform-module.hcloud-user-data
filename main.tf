@@ -29,19 +29,19 @@ locals {
   cloud_config_files_map = {
     "debian-9" = {
       "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_cloud_config_file
+      "cpx" = local.netplan_2_cloud_config_file
     }
     "debian-10" = {
       "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_cloud_config_file
+      "cpx" = local.netplan_2_cloud_config_file
     }
     "debian-11" = {
       "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_cloud_config_file
+      "cpx" = local.netplan_2_cloud_config_file
     }
     "ubuntu-20.04" = {
-      "cx"  = local.netplan_cloud_config_file
-      "cpx" = local.netplan_cloud_config_file
+      "cx"  = local.netplan_2_cloud_config_file
+      "cpx" = local.netplan_2_cloud_config_file
     }
     "fedora-34" = {
       "cx"  = local.ifcfg_cloud_config_file

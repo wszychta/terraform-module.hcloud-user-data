@@ -25,15 +25,25 @@ output "result_interfacesd_nameservers_file" {
 # Netplan outputs
 
 output "result_netplan_file" {
-  value = local.netplan_cloud_config_file
+  value = local.netplan_2_cloud_config_file
 }
 
 output "result_netplan_network_file" {
-  value = local.netplan_network_file
+  value = local.netplan_2_network_file
 }
 
 output "result_netplan_network_merge_script" {
-  value = local.netplan_network_merge_script
+  value = local.netplan_2_network_merge_script
+}
+
+# Cloud-init network v1 outputs
+
+output "result_network_v1_file" {
+  value = local.network_v1_cloud_config_file
+}
+
+output "result_network_v1_config_file" {
+  value = yamlencode(local.network_v1_file_map)
 }
 
 # test outputs
