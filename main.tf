@@ -25,6 +25,36 @@ locals {
     }
   )
   additional_hosts_entries_file_path = "/root/cloud_config_files/additional_hosts_file"
+  additional_hosts_entries_cloud_init_write_files_map = local.additional_hosts_entries_file != "" ? {
+    encoding    = "b64"
+    content     = base64encode(local.additional_hosts_entries_file)
+    owner       = "root:root"
+    path        = local.additional_hosts_entries_file_path
+    permissions = "0644"
+  } : {}
+  additional_hosts_entries_cloud_init_run_cmd_list = local.additional_hosts_entries_file != "" ? [
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/hosts",
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/cloud/templates/hosts.debian.tmpl",
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/cloud/templates/hosts.rhel.tmpl"
+  ] : []
+
+  additional_files_cloud_init_write_files_map = length(var.additional_write_files) > 0 ? [for file in var.additional_write_files :
+    {
+      encoding    = "b64"
+      content     = base64encode(file.content)
+      owner       = "${file.owner_user}:${file.owner_group}"
+      path        = file.destination
+      permissions = file.permissions
+    }
+  ] : []
+
+  timezone_cloud_init_write_files_map = {
+    encoding    = "b64"
+    content     = base64encode(var.timezone)
+    owner       = "root:root"
+    path        = "/etc/timezone"
+    permissions = "0644"
+  }
 
   cloud_config_files_map = {
     "debian-9" = {
@@ -44,8 +74,10 @@ locals {
       "cpx" = local.netplan_2_cloud_config_file
     }
     "fedora-34" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
+      # "cx"  = local.ifcfg_cloud_config_file
+      # "cpx" = local.ifcfg_cloud_config_file
+      "cx"  = local.network_v1_cloud_config_file
+      "cpx" = local.network_v1_cloud_config_file
     }
     "centos-7" = {
       "cx"  = local.ifcfg_cloud_config_file
@@ -65,8 +97,8 @@ locals {
     }
   }
 
-  server_type_letters_only = replace(var.server_type, "/[1-9]+/", "")
-  os_image_name_without_version = join("-",compact([ for element in split("-",var.server_image): replace(element, "/[1-9]+/", "")])) 
-  system_user_data_files   = local.cloud_config_files_map[var.server_image]
-  result_user_data_file    = local.system_user_data_files[local.server_type_letters_only]
+  server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
+  os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
+  system_user_data_files        = local.cloud_config_files_map[var.server_image]
+  result_user_data_file         = local.system_user_data_files[local.server_type_letters_only]
 }

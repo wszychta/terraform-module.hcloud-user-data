@@ -38,7 +38,7 @@ output "result_netplan_network_merge_script" {
 
 # Cloud-init network v1 outputs
 
-output "result_network_v1_file" {
+output "result_network_v1_cloud_config_file" {
   value = local.network_v1_cloud_config_file
 }
 
