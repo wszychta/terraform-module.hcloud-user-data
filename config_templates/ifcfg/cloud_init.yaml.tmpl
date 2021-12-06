@@ -57,6 +57,13 @@ write_files:
 %{ endif ~}
 %{ if additional_hosts_entries_file_base64 != "" || length(additional_run_commands) > 0 ~}
 
+%{ if length(ifcfg_network_config_files) > 0 ~}
+bootcmd:
+%{ for network_config in ifcfg_network_config_files ~}
+    - nmcli con up "System ${ network_config.device_id }"
+%{ endfor ~}
+%{ endif ~}
+
 runcmd:
 %{ if additional_hosts_entries_file_base64 != "" ~}
   # Inject hosts variables on first boot

@@ -74,10 +74,10 @@ locals {
       "cpx" = local.netplan_2_cloud_config_file
     }
     "fedora-34" = {
-      # "cx"  = local.ifcfg_cloud_config_file
-      # "cpx" = local.ifcfg_cloud_config_file
-      "cx"  = local.network_v1_cloud_config_file
-      "cpx" = local.network_v1_cloud_config_file
+      "cx"  = local.ifcfg_cloud_config_file
+      "cpx" = local.ifcfg_cloud_config_file
+      # "cx"  = local.network_v1_cloud_config_file
+      # "cpx" = local.network_v1_cloud_config_file
     }
     "centos-7" = {
       "cx"  = local.ifcfg_cloud_config_file

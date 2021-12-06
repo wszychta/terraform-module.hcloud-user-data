@@ -16,10 +16,12 @@ All actions taken to create user-data file are based on [Hetzner server configur
     - `debian-9`
     - `debian-10`
     - `debian-11`
-  - `Network manager` script - for images:
-    - `fedora-33`
+  - `ifcfg` script - for images:
+    - `fedora-34`
     - `centos-7`
     - `centos-8`
+    - `centos-stream-8`
+    - `rocky-8`
 - Adding additional users with ssh keys and `sudo` configuration
 - Writing additional entries in `/etc/hosts` file
 - Writing additional files on instance (ex. cron jobs)
@@ -34,7 +36,7 @@ All actions taken to create user-data file are based on [Hetzner server configur
 |:---------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|:------------------:|:------------------:|
 | Ubuntu 18.04    | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Ubuntu 20.04    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Fedora 34       | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
+| Fedora 34       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 9        | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 10       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 11       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
