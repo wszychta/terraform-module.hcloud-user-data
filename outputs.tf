@@ -36,15 +36,15 @@ output "result_netplan_network_merge_script" {
   value = local.netplan_2_network_merge_script
 }
 
-# Cloud-init network v1 outputs
+# ifcfg outputs
 
-output "result_network_v1_cloud_config_file" {
-  value = local.network_v1_cloud_config_file
+output "result_ifcfg_cloud_config_map" {
+  value = local.ifcfg_cloud_config_file_map
 }
 
-output "result_network_v1_config_file" {
-  value = yamlencode(local.network_v1_file_map)
-}
+# output "result_network_v1_config_file" {
+#   value = yamlencode(local.network_v1_file_map)
+# }
 
 # test outputs
 

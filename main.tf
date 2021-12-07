@@ -74,31 +74,36 @@ locals {
       "cpx" = local.netplan_2_cloud_config_file
     }
     "fedora-34" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
-      # "cx"  = local.network_v1_cloud_config_file
-      # "cpx" = local.network_v1_cloud_config_file
-    }
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    },
+    # "fedora-35" = {
+    #   "cx"  = local.ifcfg_cloud_config_file_map
+    #   "cpx" = local.ifcfg_cloud_config_file_map
+    # }
     "centos-7" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
-    }
-    "centos-8" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
     }
     "centos-stream-8" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
     }
     "rocky-8" = {
-      "cx"  = local.ifcfg_cloud_config_file
-      "cpx" = local.ifcfg_cloud_config_file
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
     }
   }
 
   server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
   os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
   system_user_data_files        = local.cloud_config_files_map[var.server_image]
-  result_user_data_file         = local.system_user_data_files[local.server_type_letters_only]
+  # result_user_data_file         = local.system_user_data_files[local.server_type_letters_only]
+
+  result_user_data_file = templatefile(
+    "${path.module}/config_templates/common/cloud_init.yaml.tmpl",
+    {
+      cloud_config = yamlencode(local.system_user_data_files[local.server_type_letters_only])
+    }
+  )
 }

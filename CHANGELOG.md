@@ -5,9 +5,12 @@
 - Resolve DNS issues on all debian systems
 - Remove unsupported images:
     - fedora-33
+    - centos-7
+    - centos-8 - Please read this [post](https://blog.centos.org/2020/12/future-is-centos-stream/)
 - Add new supported images:
     - fedora-34
     - rocky-8
+    - centos-stream-8
 
 # 1.0.0
 ## Main changes
