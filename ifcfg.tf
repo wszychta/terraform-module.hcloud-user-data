@@ -18,10 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 locals {
   ifcfg_network_root_directory = "/etc/sysconfig/network-scripts"
 
-  ifcfg_network_config_files_map = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : 
+  ifcfg_network_config_files_map = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings :
     {
-      encoding    = "b64"
-      content     = base64encode(templatefile(
+      encoding = "b64"
+      content = base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_config.tmpl",
         {
           server_type           = var.server_type
@@ -33,13 +33,13 @@ locals {
       owner       = "root:root"
       path        = "${local.ifcfg_network_root_directory}/ifcfg-${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}"
       permissions = "0644"
-    } 
+    }
   ] : []
 
-  ifcfg_network_routes_files_map = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : 
+  ifcfg_network_routes_files_map = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings :
     length(net_config.routes) > 0 ? {
-      encoding    = "b64"
-      content     = base64encode(templatefile(
+      encoding = "b64"
+      content = base64encode(templatefile(
         "${path.module}/config_templates/ifcfg/private_network_routes.tmpl",
         {
           device_id = local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
@@ -54,7 +54,7 @@ locals {
 
   ifcfg_network_routes_files_map_no_empty_elements = [for route_file in local.ifcfg_network_routes_files_map : route_file if route_file != {}]
 
-  ifcfg_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up 'System ${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'" ] : []
+  ifcfg_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up 'System ${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
 
   ifcfg_cloud_config_file_map = {
     users = length(var.additional_users) > 0 ? [for user in var.additional_users :
@@ -77,6 +77,7 @@ locals {
       local.additional_hosts_entries_cloud_init_run_cmd_list,
       var.additional_run_commands
     ])
+    packages        = length(var.additional_packages) > 0 ? var.additional_packages : null
     package_upgrade = var.upgrade_all_packages
     power_state = var.timezone != null || var.reboot_instance || var.upgrade_all_packages || length(var.private_networks_settings) > 0 ? {
       mode    = "reboot"
@@ -84,11 +85,4 @@ locals {
       message = "Reboot the machine after successfull cloud-init run with custom cloud-config file"
     } : null
   }
-
-  # ifcfg_cloud_config_file = templatefile(
-  #   "${path.module}/config_templates/common/cloud_init.yaml.tmpl",
-  #   {
-  #     cloud_config = yamlencode(local.ifcfg_cloud_config_file_map)
-  #   }
-  # )
 }

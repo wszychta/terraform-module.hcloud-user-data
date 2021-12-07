@@ -7,25 +7,19 @@ All actions taken to create user-data file are based on [Hetzner server configur
 ## Supported features
 - Generating private networks configuration for instance after initial boot ( only dhcp - no support for static interface configuration ). This module use three different ways of managing networks
   - `interfaces.d` config file - for images:
-    - `ubuntu-18.04`
-    - `debian-9`
     - `debian-10`
     - `debian-11`
   - `Netplan` config file - for images:
     - `ubuntu-20.04`
-    - `debian-9`
-    - `debian-10`
-    - `debian-11`
   - `ifcfg` script - for images:
     - `fedora-34`
-    - `centos-7`
-    - `centos-8`
     - `centos-stream-8`
     - `rocky-8`
 - Adding additional users with ssh keys and `sudo` configuration
 - Writing additional entries in `/etc/hosts` file
 - Writing additional files on instance (ex. cron jobs)
 - Running additional shell commands on initial boot (ex. docker instalation)
+- Adding additional packages to VM
 - Setting instance Timezone
 - Upgrading all packages
 - Rebooting after finishing all cloud-init tasks
@@ -34,16 +28,12 @@ All actions taken to create user-data file are based on [Hetzner server configur
 
 | System image    | Routing Configuration | DNS ip addresses | DNS search domains | `/etc/hosts` file writing | Creating additional users | Writing additional Files | Running additional commands | Upgrading packages | Rebooting instance |
 |:---------------:|:---------------------:|:----------------:|:------------------:|:-------------------------:|:-------------------------:|:------------------------:|:---------------------------:|:------------------:|:------------------:|
-| Ubuntu 18.04    | Yes                   | Yes              | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Ubuntu 20.04    | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Fedora 34       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Debian 9        | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 10       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
 | Debian 11       | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | Yes                |
-| Centos 7        | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
-| Centos 8        | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
-| Centos Stream 8 | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
-| Rocky 8         | <b>NO</b>             | <b>NO</b>        | <b>NO</b>          | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
+| Centos Stream 8 | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
+| Rocky 8         | Yes                   | Yes              | Yes                | Yes                       | Yes                       | Yes                      | Yes                         | Yes                | <b>NO</b>          |
 
 Please take a look at [Known Issues](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#known-issues) section to read why some of the features are not working on described images.
 
@@ -64,7 +54,7 @@ This module will not work on:
 Example for Debian/Ubuntu with few packages installation:
 ```
 module "cloud_config_file" {
-  source            = "git::git@github.com:wszychta/terraform-module.hcloud-user-data?ref=tags/1.0.0"
+  source            = "git::git@github.com:wszychta/terraform-module.hcloud-user-data?ref=tags/2.0.0"
   server_type       = "cpx11"
   server_image      = "ubuntu-20.04"
   additional_users  = [
@@ -111,33 +101,22 @@ module "cloud_config_file" {
     }
   ]
   additional_run_commands = [
-    "apt-get install -y htop telnet nano"
+    "echo 'test command'"
+  ]
+  additional_run_commands = [
+    "htop",
+    "telnet",
+    "nano"
   ]
 }
 ```
 
 ## Known Issues
-
-### DNS search option doesn't work
-affected images:
-- `ubuntu-18.04`
-
-### Networking part not working
-For some reasons Network manager is not able to manage Hetzner private networks after initial boot. I have contacted Hetzner support and they advised me to remove `hc-utils`, but I haven't tested that. This module will still generate neccessary configuration files in `/etc/sysconfig/network-scripts/`, but before running it you will need to make sure that Network Manager is able to configure additional interfaces
-
-affected images:
-- `centos-7`
-- `centos-8`
-- `centos-stream-8`
-- `rocky-8`
-- `fedora-34`
-
 ### cloud-init reboot not working
-I checked that `power-state-change` module is enabled by default in `/etc/cloud/cloud.cfg`, but for some images cloud-init is not forcing reboot on machine. I don't know if this is bug in cloud-init, centos images or both in the same time.
+I checked that `power-state-change` module is enabled by default in `/etc/cloud/cloud.cfg`, but for some images cloud-init is not forcing reboot on machine. I don't know if this is bug in cloud-init, images bug or both in the same time.
+There is also possibility that when I was testing this module there were no packages which required rebooting instance. You can read more about this in [cloud-init power-state-change](https://cloudinit.readthedocs.io/en/latest/topics/modules.html#power-state-change) module description.
 
 affected images:
-- `centos-7`
-- `centos-8`
 - `centos-stream-8`
 - `rocky-8`
 
@@ -152,6 +131,7 @@ affected images:
 | additional_write_files    |<pre>list(object({<br>    content     = string<br>    owner_user  = string<br>    owner_group = string<br>    destination = string<br>    permissions = string<br>}))</pre>| `[]` | <b>No</b> | List of additional files to create on first boot.<br><b>Note:</b> inside `content` value please provide <u><i>plain text content of the file</i></u> (not the path to the file).<br>You can use terraform to generate file from template or to read existing file from local machine |
 | additional_hosts_entries  |<pre>list(object({<br>    ip        = string<br>    hostnames    = string<br>}))</pre>| `[]` | <b>No</b> | List of entries for `/etc/hosts` file. There is possibility to define multiple hostnames per single ip address |
 | additional_run_commands   | `list(string)` | `[]`            | <b>No</b>         | List of additional commands to run on boot |
+| additional_packages       | `list(string)` | `[]`            | <b>No</b>         | List of additional pckages to install on first boot |
 | timezone                  | `string`       | `Europe/Berlin` | <b>No</b>         | Timezone for the VM |
 | upgrade_all_packages      | `bool`         | `true`          | <b>No</b>         | Set to false when there is no need to upgrade packages on first boot |
 | reboot_instance           | `bool`         | `true`          | <b>No</b>         | Set to false when there is no need for instance reboot after finishing cloud-init tasks |
@@ -180,8 +160,6 @@ Please use the [issues tab](https://github.com/wszychta/terraform-module.hcloud-
 I can't guarantee that I will work on every bug/feature, because this is my side project, but I will try to keep an eye on any created issue.
 Also I have decided to not work on images:
 - `ubuntu-18.04`, `centos-7`, `debian-9`, `debian-10` - Because I don't use described types of images
-- `centos-8` - Because of the problems described in [Known Issues](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#known-issues)
-- `ubuntu-16.04` and `fedora-32` - Because they will not be avaliable on Hetzner cloud after <b>June 24 2021</b>
 
 So if somebody knows how to fix any of described issues please look into [Developing](https://github.com/wszychta/terraform-module.hcloud-user-data/tree/initial_commit#developing) section
 

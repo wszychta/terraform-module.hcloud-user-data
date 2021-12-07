@@ -56,6 +56,11 @@ variable "additional_run_commands" {
   default = []
 }
 
+variable "additional_packages" {
+  type    = list(string)
+  default = []
+}
+
 variable "upgrade_all_packages" {
   type    = bool
   default = true

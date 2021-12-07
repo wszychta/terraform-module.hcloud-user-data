@@ -57,21 +57,17 @@ locals {
   }
 
   cloud_config_files_map = {
-    "debian-9" = {
-      "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_2_cloud_config_file
-    }
     "debian-10" = {
-      "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_2_cloud_config_file
+      "cx"  = local.interfaced_cloud_config_file_map
+      "cpx" = local.interfaced_cloud_config_file_map
     }
     "debian-11" = {
-      "cx"  = local.interfaced_cloud_config_file
-      "cpx" = local.netplan_2_cloud_config_file
+      "cx"  = local.interfaced_cloud_config_file_map
+      "cpx" = local.interfaced_cloud_config_file_map
     }
     "ubuntu-20.04" = {
-      "cx"  = local.netplan_2_cloud_config_file
-      "cpx" = local.netplan_2_cloud_config_file
+      "cx"  = local.netplan_2_cloud_config_file_map
+      "cpx" = local.netplan_2_cloud_config_file_map
     }
     "fedora-34" = {
       "cx"  = local.ifcfg_cloud_config_file_map
@@ -81,10 +77,6 @@ locals {
     #   "cx"  = local.ifcfg_cloud_config_file_map
     #   "cpx" = local.ifcfg_cloud_config_file_map
     # }
-    "centos-7" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
-    }
     "centos-stream-8" = {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map
@@ -98,7 +90,6 @@ locals {
   server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
   os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
   system_user_data_files        = local.cloud_config_files_map[var.server_image]
-  # result_user_data_file         = local.system_user_data_files[local.server_type_letters_only]
 
   result_user_data_file = templatefile(
     "${path.module}/config_templates/common/cloud_init.yaml.tmpl",
