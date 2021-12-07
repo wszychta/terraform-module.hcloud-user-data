@@ -4,8 +4,8 @@
 - Add possibility to define timezone with cloudinit on boot
 - Add possibility to install additional packages
 - This module doesn't force packages upgrade on first boot if variable `upgrade_all_packages` was set to false
-- Resolve DNS issues on all debian systems
-- Resolve Network and DNS issues on RHEL systems
+- Resolve DNS issues on supported debian systems
+- Resolve Network and DNS issues on supported RHEL systems
 - Remove unsupported images:
     - fedora-33
     - centos-7
@@ -16,6 +16,9 @@
     - fedora-34
     - rocky-8
     - centos-stream-8
+
+## Warnings
+<b>This is breaking change, please take a look at all [Outputs](README.md#outputs). Names of the `outputs` have changed since version 1.0.0</b>
 
 # 1.0.0
 ## Main changes

@@ -72,11 +72,7 @@ locals {
     "fedora-34" = {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map
-    },
-    # "fedora-35" = {
-    #   "cx"  = local.ifcfg_cloud_config_file_map
-    #   "cpx" = local.ifcfg_cloud_config_file_map
-    # }
+    }
     "centos-stream-8" = {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map

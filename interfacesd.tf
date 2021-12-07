@@ -18,30 +18,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 locals {
 
   interfaced_nameservers_list = distinct(compact(flatten([for network_settings in var.private_networks_settings : network_settings.nameservers.addresses])))
+  interfaced_nameservers_file = length(local.interfaced_nameservers_list) > 0 ? templatefile(
+    "${path.module}/config_templates/interfacesd/nameservers_file.tmpl",
+    {
+      nameservers_list      = local.interfaced_nameservers_list
+      nameservers_file_path = "/etc/resolvconf/resolv.conf.d/head"
+    }
+  ) : ""
+  interfaced_network_config_file = length(var.private_networks_settings) > 0 && var.server_type != "" ? templatefile(
+    "${path.module}/config_templates/interfacesd/private_network.tmpl",
+    {
+      server_type               = var.server_type
+      private_networks_settings = var.private_networks_settings
+    }
+  ) : ""
 
   interfaced_network_config_file_map = length(var.private_networks_settings) > 0 && var.server_type != "" ? [{
-    encoding = "b64"
-    content = base64encode(templatefile(
-      "${path.module}/config_templates/interfacesd/private_network.tmpl",
-      {
-        server_type               = var.server_type
-        private_networks_settings = var.private_networks_settings
-      }
-    ))
+    encoding    = "b64"
+    content     = base64encode(local.interfaced_network_config_file)
     owner       = "root:root"
     path        = "/etc/network/interfaces.d/61-my-private-network.cfg"
     permissions = "0644"
   }] : []
 
   interfaced_nameservers_file_map = length(local.interfaced_nameservers_list) > 0 ? [{
-    encoding = "b64"
-    content = base64encode(templatefile(
-      "${path.module}/config_templates/interfacesd/nameservers_file.tmpl",
-      {
-        nameservers_list      = local.interfaced_nameservers_list
-        nameservers_file_path = "/etc/resolvconf/resolv.conf.d/head"
-      }
-    ))
+    encoding    = "b64"
+    content     = base64encode(local.interfaced_nameservers_file)
     owner       = "root:root"
     path        = "/etc/resolvconf/resolv.conf.d/head"
     permissions = "0644"

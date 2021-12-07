@@ -52,17 +52,19 @@ locals {
     permissions = "0644"
   }] : []
 
+  netplan2_merge_script_file = length(var.private_networks_settings) > 0 ? templatefile(
+    "${path.module}/config_templates/netplan_2/merge_network_files.sh.tmpl",
+    {
+      yq_version                = var.yq_version
+      yq_binary                 = var.yq_binary
+      private_network_file_path = local.netplan_2_network_file_path
+      netplan_file_path         = "/etc/netplan/50-cloud-init.yaml"
+    }
+  ) : ""
+
   netplan2_merge_script_file_map = length(var.private_networks_settings) > 0 ? [{
-    encoding = "b64"
-    content = base64encode(templatefile(
-      "${path.module}/config_templates/netplan_2/merge_network_files.sh.tmpl",
-      {
-        yq_version                = var.yq_version
-        yq_binary                 = var.yq_binary
-        private_network_file_path = local.netplan_2_network_file_path
-        netplan_file_path         = "/etc/netplan/50-cloud-init.yaml"
-      }
-    ))
+    encoding    = "b64"
+    content     = base64encode(local.netplan2_merge_script_file)
     owner       = "root:root"
     path        = "/root/cloud_config_files/merge_script.sh"
     permissions = "0700"
