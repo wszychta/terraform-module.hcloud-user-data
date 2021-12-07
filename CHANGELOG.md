@@ -1,3 +1,5 @@
+# 2.0.1
+- Fix readme
 # 2.0.0
 ## Main changes
 - Moving from cloud-init definition in template files to terraform maps - this gives more flexibility than working with templates
