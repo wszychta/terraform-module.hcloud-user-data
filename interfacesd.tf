@@ -16,41 +16,69 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 locals {
-  interfaced_network_file = length(var.private_networks_settings) > 0 && var.server_type != "" ? templatefile(
+
+  interfaced_nameservers_list = distinct(compact(flatten([for network_settings in var.private_networks_settings : network_settings.nameservers.addresses])))
+  interfaced_nameservers_file = length(local.interfaced_nameservers_list) > 0 ? templatefile(
+    "${path.module}/config_templates/interfacesd/nameservers_file.tmpl",
+    {
+      nameservers_list      = local.interfaced_nameservers_list
+      nameservers_file_path = "/etc/resolvconf/resolv.conf.d/head"
+    }
+  ) : ""
+  interfaced_network_config_file = length(var.private_networks_settings) > 0 && var.server_type != "" ? templatefile(
     "${path.module}/config_templates/interfacesd/private_network.tmpl",
     {
-      server_type               = var.server_type,
+      server_type               = var.server_type
       private_networks_settings = var.private_networks_settings
     }
   ) : ""
-  interfaced_network_file_path = "/etc/network/interfaces.d/61-my-private-network.cfg"
 
-  # resolvconf file with all nameservers inside it
-  interfaced_nameservers_file_path = "/etc/resolvconf/resolv.conf.d/head"
-  interfaced_nameservers_list      = compact(flatten([for network_settings in var.private_networks_settings : network_settings.nameservers.addresses]))
-  interfaced_nameservers_file      = length(local.interfaced_nameservers_list) == 0 ? "" : templatefile(
-    "${path.module}/config_templates/interfacesd/nameservers_file.tmpl",
-    {
-      nameservers_list = local.interfaced_nameservers_list
-      nameservers_file_path = local.interfaced_nameservers_file_path
-    }
-  )
+  interfaced_network_config_file_map = length(var.private_networks_settings) > 0 && var.server_type != "" ? [{
+    encoding    = "b64"
+    content     = base64encode(local.interfaced_network_config_file)
+    owner       = "root:root"
+    path        = "/etc/network/interfaces.d/61-my-private-network.cfg"
+    permissions = "0644"
+  }] : []
 
-  # Cloud config final file output
-  interfaced_cloud_config_file = templatefile(
-    "${path.module}/config_templates/interfacesd/cloud_init.yaml.tmpl",
-    {
-      private_network_file_base64           = length(var.private_networks_settings) > 0 ? base64encode(local.interfaced_network_file) : "",
-      private_network_file_path             = local.interfaced_network_file_path,
-      nameservers_file_base64               = length(local.interfaced_nameservers_list) > 0 ? base64encode(local.interfaced_nameservers_file) : ""
-      nameservers_file_path                 = local.interfaced_nameservers_file_path
-      additional_users                      = var.additional_users,
-      additional_hosts_entries_file_base64  = length(var.additional_hosts_entries) > 0 ? base64encode(local.additional_hosts_entries_file) : "",
-      additional_hosts_entries_file_path    = local.additional_hosts_entries_file_path
-      additional_write_files                = var.additional_write_files,
-      additional_run_commands               = var.additional_run_commands,
-      upgrade_all_packages                  = var.upgrade_all_packages,
-      reboot_instance                       = var.reboot_instance
-    }
-  )
+  interfaced_nameservers_file_map = length(local.interfaced_nameservers_list) > 0 ? [{
+    encoding    = "b64"
+    content     = base64encode(local.interfaced_nameservers_file)
+    owner       = "root:root"
+    path        = "/etc/resolvconf/resolv.conf.d/head"
+    permissions = "0644"
+  }] : []
+
+  interfaced_cloud_config_file_map = {
+    users = length(var.additional_users) > 0 ? [for user in var.additional_users :
+      {
+        name            = user.username
+        sudo_options    = user.sudo_options
+        ssh_public_keys = length(user.ssh_public_keys) > 0 ? user.ssh_public_keys : null
+      }
+    ] : null
+    timezone = var.timezone
+    write_files = flatten([
+      local.additional_hosts_entries_cloud_init_write_files_map,
+      local.additional_files_cloud_init_write_files_map,
+      local.interfaced_network_config_file_map,
+      local.interfaced_nameservers_file_map,
+      local.timezone_cloud_init_write_files_map
+    ])
+    runcmd = length(local.interfaced_nameservers_list) > 0 ? flatten([
+      local.additional_hosts_entries_cloud_init_run_cmd_list,
+      var.additional_run_commands,
+      "systemctl enable resolvconf"
+      ]) : flatten([
+      local.additional_hosts_entries_cloud_init_run_cmd_list,
+      var.additional_run_commands,
+    ])
+    packages        = length(var.additional_packages) > 0 && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : length(var.additional_packages) > 0 ? var.additional_packages : length(local.interfaced_nameservers_list) > 0 ? ["resolvconf"] : null
+    package_upgrade = var.upgrade_all_packages
+    power_state = var.timezone != null || var.reboot_instance || var.upgrade_all_packages || length(var.private_networks_settings) > 0 ? {
+      mode    = "reboot"
+      delay   = "now"
+      message = "Reboot the machine after successfull cloud-init run with custom cloud-config file"
+    } : null
+  }
 }

@@ -16,30 +16,81 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 locals {
-  supported_os_map = {
-    interfaced = [
-      "debian-10",
-      "debian-9",
-      "ubuntu-18.04"
-    ],
-    nm = [
-      "fedora-33",
-      "centos-7",
-      "centos-8"
-    ]
-    netplan = [
-      "ubuntu-20.04",
-    ]
-  }
-  
+
   # Configure additional hosts entries
   additional_hosts_entries_file = length(var.additional_hosts_entries) == 0 ? "" : templatefile(
     "${path.module}/config_templates/common/additional_hosts_entries_file.tmpl",
     {
-      additional_hosts_entries  = var.additional_hosts_entries,
+      additional_hosts_entries = var.additional_hosts_entries,
     }
   )
   additional_hosts_entries_file_path = "/root/cloud_config_files/additional_hosts_file"
+  additional_hosts_entries_cloud_init_write_files_map = local.additional_hosts_entries_file != "" ? {
+    encoding    = "b64"
+    content     = base64encode(local.additional_hosts_entries_file)
+    owner       = "root:root"
+    path        = local.additional_hosts_entries_file_path
+    permissions = "0644"
+  } : {}
+  additional_hosts_entries_cloud_init_run_cmd_list = local.additional_hosts_entries_file != "" ? [
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/hosts",
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/cloud/templates/hosts.debian.tmpl",
+    "cat ${local.additional_hosts_entries_file_path} >> /etc/cloud/templates/hosts.rhel.tmpl"
+  ] : []
 
-  result_user_data_file = contains(local.supported_os_map["nm"], lower(var.server_image)) ? local.nm_cloud_config_file : contains(local.supported_os_map["interfaced"], lower(var.server_image)) ? local.interfaced_cloud_config_file : contains(local.supported_os_map["netplan"], lower(var.server_image)) ? local.netplan_cloud_config_file : ""
+  additional_files_cloud_init_write_files_map = length(var.additional_write_files) > 0 ? [for file in var.additional_write_files :
+    {
+      encoding    = "b64"
+      content     = base64encode(file.content)
+      owner       = "${file.owner_user}:${file.owner_group}"
+      path        = file.destination
+      permissions = file.permissions
+    }
+  ] : []
+
+  timezone_cloud_init_write_files_map = {
+    encoding    = "b64"
+    content     = base64encode(var.timezone)
+    owner       = "root:root"
+    path        = "/etc/timezone"
+    permissions = "0644"
+  }
+
+  cloud_config_files_map = {
+    "debian-10" = {
+      "cx"  = local.interfaced_cloud_config_file_map
+      "cpx" = local.interfaced_cloud_config_file_map
+    }
+    "debian-11" = {
+      "cx"  = local.interfaced_cloud_config_file_map
+      "cpx" = local.interfaced_cloud_config_file_map
+    }
+    "ubuntu-20.04" = {
+      "cx"  = local.netplan_2_cloud_config_file_map
+      "cpx" = local.netplan_2_cloud_config_file_map
+    }
+    "fedora-34" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
+    "centos-stream-8" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
+    "rocky-8" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
+  }
+
+  server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
+  os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
+  system_user_data_files        = local.cloud_config_files_map[var.server_image]
+
+  result_user_data_file = templatefile(
+    "${path.module}/config_templates/common/cloud_init.yaml.tmpl",
+    {
+      cloud_config = yamlencode(local.system_user_data_files[local.server_type_letters_only])
+    }
+  )
 }
