@@ -148,17 +148,17 @@ affected images:
 
 ## Outputs
 
-| Output name                         | Description |
-|:-----------------------------------:|:------------|
-| result_file                         | Result cloud-config file which will be used by instance (depending on provided `server_image` variable) |
-| result_hosts_file                   | Result host entries file which will be injected into `/etc/hosts` file |
-| result_interfacesd_file_map         | Result cloud-config for interfaces.d compatible instance |
-| interfaced_network_config_file      | Result interfaces.d network file |
-| interfaced_nameservers_file         | Result resolvconf file for interfaces.d compatible instance |
-| netplan_cloud_config_file_map       | Result cloud-config for Netplan compatible instance |
-| netplan_network_file                | Result netplan network file which will be merged to main netplan file |
-| netplan_network_merge_script        | Result netplan merge script file |
-| result_ifcfg_cloud_config_map       | Result cloud-config for Network manager compatible instance |
+| Output name                          | Description |
+|:------------------------------------:|:------------|
+| result_file                          | Result cloud-config file which will be used by instance (depending on provided `server_image` variable) |
+| result_hosts_file                    | Result host entries file which will be injected into `/etc/hosts` file |
+| result_interfacesd_file_map          | Result cloud-config for interfaces.d compatible instance |
+| interfaced_network_config_file       | Result interfaces.d network file |
+| interfaced_nameservers_file          | Result resolvconf file for interfaces.d compatible instance |
+| result_netplan_cloud_config_file_map | Result cloud-config for Netplan compatible instance |
+| netplan_network_file                 | Result netplan network file which will be merged to main netplan file |
+| netplan_network_merge_script         | Result netplan merge script file |
+| result_ifcfg_cloud_config_map        | Result cloud-config for Network manager compatible instance |
 
 ## Contributing
 ### Bug Reports/Feature Requests
