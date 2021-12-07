@@ -24,7 +24,7 @@ output "interfaced_nameservers_file" {
 
 # Netplan outputs
 
-output "netplan_file_map" {
+output "netplan_cloud_config_file_map" {
   value = local.netplan_2_cloud_config_file_map
 }
 
