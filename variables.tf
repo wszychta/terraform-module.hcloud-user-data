@@ -23,7 +23,7 @@ variable "private_networks_settings" {
       network_id = string
       ip         = string
       alias_ips  = list(string)
-      routes = map(list(string))
+      routes     = map(list(string))
       nameservers = object(
         {
           addresses = list(string)
