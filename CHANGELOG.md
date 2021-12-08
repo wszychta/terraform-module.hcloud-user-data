@@ -1,3 +1,9 @@
+# 2.1.0
+- Update structure of the variable `private_networks_settings` to work fine with with [hcloud-server module](https://github.com/wszychta/terraform-module.hcloud-server) - new variables are not used for now, but it makes space for future improvements
+
+## Warnings
+<b>Please check described variable new structure. Previous one will not work with this version of the module. Result file will not change after applying this version of module.</b>
+
 # 2.0.1
 - Fix readme
 # 2.0.0

@@ -20,6 +20,9 @@ variable "additional_users" {
 variable "private_networks_settings" {
   type = list(object(
     {
+      network_id = string
+      ip         = string
+      alias_ips  = list(string)
       routes = map(list(string))
       nameservers = object(
         {
