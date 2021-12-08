@@ -46,7 +46,6 @@ I have tested this module on below instances types:
 <b>This module should also work on the rest of standard machines with Local SSD based on avaliable documentation.</b>
 
 This module will not work on:
-- CEPH instances (CXxx-CEPH)
 - Dedicated instances (CCXxx)
 
 ## Usage example
