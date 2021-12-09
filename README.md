@@ -46,7 +46,6 @@ I have tested this module on below instances types:
 <b>This module should also work on the rest of standard machines with Local SSD based on avaliable documentation.</b>
 
 This module will not work on:
-- CEPH instances (CXxx-CEPH)
 - Dedicated instances (CCXxx)
 
 ## Usage example
@@ -135,7 +134,7 @@ affected images:
 | server_type               | `string`       | `empty`         | <b>Yes</b>        | Hetzner server type (ex. cpx11) |
 | server_image              | `string`       | `empty`         | <b>Yes</b>        | Instance system image |
 | additional_users          |<pre>list(object({<br>    username        = string<br>    sudo_options    = string<br>    ssh_public_keys = list(string)<br>}))</pre>| `[]` | <b>No</b> | List of additional users with their options |
-| private_networks_settings |<pre>list(object({<br>    routes        = map(list(string))<br>    nameservers   = object({<br>      addresses   = list(string)<br>      search      = list(string)<br>    })<br>})</pre>| `[]` | <b>No</b> | List of configuration for all private networks.<br><b>Note:</b> Routes are defined as <b>map(list(string))</b> where key is a <b>gateway ip address</b> and list contains all <b> network destinations</b>.<br><b>Example:</b> `"192.168.0.1" = ["192.168.0.0/24","192.168.1.0/24"]` |
+| private_networks_settings |<pre>list(object({<br>    network_id    = string<br>    ip            = string<br>    alias_ips     = list(string)<br>    routes        = map(list(string))<br>    nameservers   = object({<br>      addresses   = list(string)<br>      search      = list(string)<br>    })<br>})</pre>| `[]` | <b>No</b> | List of configuration for all private networks.<br><b>Note:</b> Routes are defined as <b>map(list(string))</b> where key is a <b>gateway ip address</b> and list contains all <b> network destinations</b>.<br><b>Example:</b> `"192.168.0.1" = ["192.168.0.0/24","192.168.1.0/24"]` |
 | additional_write_files    |<pre>list(object({<br>    content     = string<br>    owner_user  = string<br>    owner_group = string<br>    destination = string<br>    permissions = string<br>}))</pre>| `[]` | <b>No</b> | List of additional files to create on first boot.<br><b>Note:</b> inside `content` value please provide <u><i>plain text content of the file</i></u> (not the path to the file).<br>You can use terraform to generate file from template or to read existing file from local machine |
 | additional_hosts_entries  |<pre>list(object({<br>    ip        = string<br>    hostnames    = string<br>}))</pre>| `[]` | <b>No</b> | List of entries for `/etc/hosts` file. There is possibility to define multiple hostnames per single ip address |
 | additional_run_commands   | `list(string)` | `[]`            | <b>No</b>         | List of additional commands to run on boot |
