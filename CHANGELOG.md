@@ -7,7 +7,7 @@
 <b>Please check described variable new structure. Previous one will not work with this version of the module. Result file will not change after applying this version of module.</b>
 
 # 2.0.1
-- Fix readmeś
+- Fix readme
 # 2.0.0
 ## Main changes
 - Moving from cloud-init definition in template files to terraform maps - this gives more flexibility than working with templates
