@@ -48,6 +48,14 @@ locals {
     }
   ] : []
 
+  additional_users_map = length(var.additional_users) > 0 ? [for user in var.additional_users :
+    {
+      name                = user.username
+      sudo                = user.sudo_options
+      ssh_authorized_keys = length(user.ssh_public_keys) > 0 ? user.ssh_public_keys : null
+    }
+  ] : []
+
   timezone_cloud_init_write_files_map = {
     encoding    = "b64"
     content     = base64encode(var.timezone)

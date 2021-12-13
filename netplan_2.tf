@@ -71,13 +71,7 @@ locals {
   }] : []
 
   netplan_2_cloud_config_file_map = {
-    users = length(var.additional_users) > 0 ? [for user in var.additional_users :
-      {
-        name            = user.username
-        sudo_options    = user.sudo_options
-        ssh_public_keys = length(user.ssh_public_keys) > 0 ? user.ssh_public_keys : null
-      }
-    ] : null
+    users = local.additional_users_map
     timezone = var.timezone
     write_files = flatten([
       local.additional_hosts_entries_cloud_init_write_files_map,
@@ -100,6 +94,6 @@ locals {
       mode    = "reboot"
       delay   = "now"
       message = "Reboot the machine after successfull cloud-init run with custom cloud-config file"
-    } : null
+    } : {}
   }
 }
