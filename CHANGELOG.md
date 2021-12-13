@@ -1,5 +1,5 @@
 # 2.1.1
-- Fix Netplan network configuration on boot with simple replacement `"` sign to nothing
+- Fix Netplan network configuration on boot with - empty map of nameservers and empty list of routes is passed to neplan config insted o `null`
 
 # 2.1.0
 - Update structure of the variable `private_networks_settings` to work fine with with [hcloud-server module](https://github.com/wszychta/terraform-module.hcloud-server) - new variables are not used for now, but it makes space for future improvements
