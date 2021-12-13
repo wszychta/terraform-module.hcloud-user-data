@@ -29,7 +29,7 @@ locals {
           nameservers = length(network_settings.nameservers.addresses) > 0 || length(network_settings.nameservers.search) > 0 ? {
             addresses = length(network_settings.nameservers.addresses) > 0 ? network_settings.nameservers.addresses : null
             search    = length(network_settings.nameservers.search) > 0 ? network_settings.nameservers.search : null
-          } : null
+          } : {}
           routes = length(network_settings.routes) > 0 ? flatten([
             for gateway_ip, subnets in network_settings.routes : [
               for subnet in subnets : {
@@ -38,7 +38,7 @@ locals {
                 on-link = true
               }
             ]
-          ]) : null
+          ]) : []
         }
       }
     }
@@ -46,7 +46,7 @@ locals {
 
   netplan2_network_config_file_map = length(var.private_networks_settings) > 0 && var.server_type != "" ? [{
     encoding    = "b64"
-    content     = base64encode(replace(yamlencode(local.netplan2_network_config),"\"",""))
+    content     = base64encode(yamlencode(local.netplan2_network_config))
     owner       = "root:root"
     path        = local.netplan_2_network_file_path
     permissions = "0644"
