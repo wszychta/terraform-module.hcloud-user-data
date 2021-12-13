@@ -29,7 +29,7 @@ locals {
           nameservers = length(network_settings.nameservers.addresses) > 0 || length(network_settings.nameservers.search) > 0 ? {
             addresses = length(network_settings.nameservers.addresses) > 0 ? network_settings.nameservers.addresses : null
             search    = length(network_settings.nameservers.search) > 0 ? network_settings.nameservers.search : null
-          } : null
+          } : {}
           routes = length(network_settings.routes) > 0 ? flatten([
             for gateway_ip, subnets in network_settings.routes : [
               for subnet in subnets : {
@@ -38,7 +38,7 @@ locals {
                 on-link = true
               }
             ]
-          ]) : null
+          ]) : []
         }
       }
     }
