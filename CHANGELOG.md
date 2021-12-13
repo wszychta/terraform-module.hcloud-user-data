@@ -1,3 +1,6 @@
+# 2.1.1
+- Fix Netplan network configuration on boot with simple replacement `"` sign to nothing
+
 # 2.1.0
 - Update structure of the variable `private_networks_settings` to work fine with with [hcloud-server module](https://github.com/wszychta/terraform-module.hcloud-server) - new variables are not used for now, but it makes space for future improvements
 - Add requirements

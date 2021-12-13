@@ -46,7 +46,7 @@ locals {
 
   netplan2_network_config_file_map = length(var.private_networks_settings) > 0 && var.server_type != "" ? [{
     encoding    = "b64"
-    content     = base64encode(yamlencode(local.netplan2_network_config))
+    content     = base64encode(replace(yamlencode(local.netplan2_network_config),"\"",""))
     owner       = "root:root"
     path        = local.netplan_2_network_file_path
     permissions = "0644"
