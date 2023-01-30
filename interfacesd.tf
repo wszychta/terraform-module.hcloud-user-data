@@ -61,6 +61,7 @@ locals {
     ])
     runcmd = length(local.interfaced_nameservers_list) > 0 ? flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
+      (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.packages_install_script_path}"] : [],
       "systemctl enable resolvconf",
       var.additional_run_commands
       ]) : flatten([

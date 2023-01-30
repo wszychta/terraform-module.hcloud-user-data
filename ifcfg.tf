@@ -69,10 +69,11 @@ locals {
     bootcmd = length(local.ifcfg_bootcmd_commands) > 0 ? local.ifcfg_bootcmd_commands : null
     runcmd = flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
+      (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.packages_install_script_path}"] : [],
       var.additional_run_commands
     ])
-    packages        = length(var.additional_packages) > 0 ? var.additional_packages : null
-    package_upgrade = var.upgrade_all_packages
+    packages        = length(var.additional_packages) > 0 && var.private_networks_only != true ? var.additional_packages : null
+    package_upgrade = var.upgrade_all_packages && var.private_networks_only != true ? true : false
     power_state = var.timezone != null || var.reboot_instance || var.upgrade_all_packages || length(var.private_networks_settings) > 0 ? {
       mode    = "reboot"
       delay   = "now"

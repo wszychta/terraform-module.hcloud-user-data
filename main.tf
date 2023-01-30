@@ -64,6 +64,27 @@ locals {
     permissions = "0644"
   }
 
+  # Update/install packages script file definition
+  packages_install_script_path = "/root/cloud_config_files/packages_install_script.sh"
+  packages_install_script_file = length(var.private_networks_settings) > 0 && var.private_networks_only ? templatefile(
+    "${path.module}/config_templates/common/install_packages_private_network.sh.tmpl",
+    {
+      upgrade_all_packages    = var.upgrade_all_packages
+      additional_packages     = local.server_type_letters_only == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
+      restart_network         = local.server_type_letters_only != "ubuntu" ? true : false
+      restart_network_service = local.server_type_letters_only == "debian" ? "networking" : "NetworkManager"
+      package_manager         = local.server_type_letters_only == "debian" || local.server_type_letters_only == "ubuntu" ? "apt" : "dnf"
+    }
+  ) : ""
+
+  packages_install_script_file_map = length(var.private_networks_settings) > 0 && var.private_networks_only ? [{
+    encoding    = "b64"
+    content     = base64encode(local.packages_install_script_file)
+    owner       = "root:root"
+    path        = local.packages_install_script_path
+    permissions = "0700"
+  }] : []
+
   cloud_config_files_map = {
     "debian-10" = {
       "cx"  = local.interfaced_cloud_config_file_map

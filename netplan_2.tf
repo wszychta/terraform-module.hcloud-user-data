@@ -17,9 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 locals {
 
-  netplan2_network_file_path            = "/root/cloud_config_files/config.yaml"
-  netplan2_network_merge_script_path    = "/root/cloud_config_files/merge_script.sh"
-  netplan2_packages_install_script_path = "/root/cloud_config_files/packages_install_script.sh"
+  netplan2_network_file_path         = "/root/cloud_config_files/config.yaml"
+  netplan2_network_merge_script_path = "/root/cloud_config_files/merge_script.sh"
 
   # Netplan network file definition
   netplan2_network_config = {
@@ -75,23 +74,6 @@ locals {
     permissions = "0700"
   }] : []
 
-  # Update/install packages script file definition
-  netplan2_packages_install_script_file = length(var.private_networks_settings) > 0 && var.private_networks_only ? templatefile(
-    "${path.module}/config_templates/netplan_2/install_packages_private_network.sh.tmpl",
-    {
-      upgrade_all_packages = var.upgrade_all_packages
-      additional_packages  = var.additional_packages
-    }
-  ) : ""
-
-  netplan2_packages_install_script_file_map = length(var.private_networks_settings) > 0 && var.private_networks_only ? [{
-    encoding    = "b64"
-    content     = base64encode(local.netplan2_packages_install_script_file)
-    owner       = "root:root"
-    path        = local.netplan2_packages_install_script_path
-    permissions = "0700"
-  }] : []
-
   # Cloud config definition map
   netplan_2_cloud_config_file_map = {
     users    = local.additional_users_map
@@ -101,13 +83,13 @@ locals {
       local.additional_files_cloud_init_write_files_map,
       local.netplan2_network_config_file_map,
       local.netplan2_merge_script_file_map,
-      local.netplan2_packages_install_script_file_map,
+      local.packages_install_script_file_map,
       local.timezone_cloud_init_write_files_map
     ])
     runcmd = length(var.private_networks_settings) > 0 ? flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
       ".${local.netplan2_network_merge_script_path}",
-      (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.netplan2_packages_install_script_path}"] : [],
+      (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.packages_install_script_path}"] : [],
       var.additional_run_commands
       ]) : flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
