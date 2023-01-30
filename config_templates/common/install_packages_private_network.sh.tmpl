@@ -1,0 +1,13 @@
+#!/bin/bash
+%{ if restart_network ~}
+# Restart network before task starts to apply networking changes
+systemctl restart ${ restart_network_service }
+%{ endif ~}
+%{ if upgrade_all_packages ~}
+# Upgrade existing packages
+%{ if upgrade_all_packages == "apt" }apt update && apt upgrade -y%{ else }dnf update -y%{ endif ~}
+%{ endif ~}
+%{ if length(additional_packages) > 0 }
+# Install packages outside of cloud-init
+${ package_manager } install -y %{ for package in additional_packages }${ package } %{ endfor }
+%{ endif ~}
