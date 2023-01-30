@@ -57,7 +57,8 @@ locals {
       local.additional_files_cloud_init_write_files_map,
       local.interfaced_network_config_file_map,
       local.interfaced_nameservers_file_map,
-      local.timezone_cloud_init_write_files_map
+      local.timezone_cloud_init_write_files_map,
+      local.packages_install_script_file_map
     ])
     runcmd = length(local.interfaced_nameservers_list) > 0 ? flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,

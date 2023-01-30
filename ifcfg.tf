@@ -64,7 +64,8 @@ locals {
       local.additional_files_cloud_init_write_files_map,
       local.ifcfg_network_config_files_map,
       local.ifcfg_network_routes_files_map_no_empty_elements,
-      local.timezone_cloud_init_write_files_map
+      local.timezone_cloud_init_write_files_map,
+      local.packages_install_script_file_map
     ])
     bootcmd = length(local.ifcfg_bootcmd_commands) > 0 ? local.ifcfg_bootcmd_commands : null
     runcmd = flatten([
