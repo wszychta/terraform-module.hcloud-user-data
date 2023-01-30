@@ -34,7 +34,7 @@ variable "additional_users" {
   default = []
 }
 
-variable "private_network_only" {
+variable "private_networks_only" {
   type    = bool
   default = false
 }
