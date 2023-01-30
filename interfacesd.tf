@@ -61,7 +61,8 @@ locals {
     ])
     runcmd = length(local.interfaced_nameservers_list) > 0 ? flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
-      "systemctl enable resolvconf"
+      "systemctl enable resolvconf",
+      var.additional_run_commands
       ]) : flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
       var.additional_run_commands,

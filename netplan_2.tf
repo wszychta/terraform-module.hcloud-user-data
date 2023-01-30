@@ -81,10 +81,8 @@ locals {
       local.netplan2_merge_script_file_map,
       local.timezone_cloud_init_write_files_map
     ])
-    runcmd = length(var.private_networks_settings) > 0 ? flatten([
-      local.additional_hosts_entries_cloud_init_run_cmd_list,
-      ".${local.netplan_2_network_merge_script_path}"
-      ]) : flatten([
+    bootcmd = length(var.private_networks_settings) > 0 ? [".${local.netplan_2_network_merge_script_path}"] : []
+    runcmd = flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
       var.additional_run_commands
     ])
