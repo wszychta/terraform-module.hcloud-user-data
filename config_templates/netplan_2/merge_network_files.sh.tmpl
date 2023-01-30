@@ -1,10 +1,10 @@
 #!/bin/bash
 
 if [[ -f "${ private_network_file_path }" ]]; then
-    %{ if private_networks_only ~}
+    %{ if private_networks_only }
     # Replace existing netplan file with new one in case where no public address was defined
     mv ${ private_network_file_path } ${ netplan_file_path }
-    %{ else ~}
+    %{ else }
     # Merge exiting netplan file with new one
     wget https://github.com/mikefarah/yq/releases/download/${yq_version}/${yq_binary} -O /usr/bin/yq && chmod +x /usr/bin/yq
     yq -i eval-all 'select(fi == 0) * select(filename == "${ private_network_file_path }")' ${ netplan_file_path }  ${ private_network_file_path }
