@@ -5,7 +5,7 @@ systemctl restart ${ restart_network_service }
 %{ endif ~}
 %{ if upgrade_all_packages ~}
 # Upgrade existing packages
-%{ if upgrade_all_packages == "apt" }apt update && apt upgrade -y%{ else }dnf update -y%{ endif ~}
+%{ if package_manager == "apt" }apt update && apt upgrade -y%{ else }dnf update -y%{ endif ~}
 %{ endif ~}
 %{ if length(additional_packages) > 0 }
 # Install packages outside of cloud-init
