@@ -77,7 +77,15 @@ locals {
       "cx"  = local.netplan_2_cloud_config_file_map
       "cpx" = local.netplan_2_cloud_config_file_map
     }
-    "fedora-34" = {
+    "ubuntu-22.04" = {
+      "cx"  = local.netplan_2_cloud_config_file_map
+      "cpx" = local.netplan_2_cloud_config_file_map
+    }
+    "fedora-36" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
+    "fedora-37" = {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map
     }
@@ -85,7 +93,15 @@ locals {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map
     }
+    "centos-stream-9" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
     "rocky-8" = {
+      "cx"  = local.ifcfg_cloud_config_file_map
+      "cpx" = local.ifcfg_cloud_config_file_map
+    }
+    "rocky-9" = {
       "cx"  = local.ifcfg_cloud_config_file_map
       "cpx" = local.ifcfg_cloud_config_file_map
     }

@@ -1,6 +1,7 @@
 
 # 2.2.0
 - Update Default YQ package version
+- Update a list of available instances types
 - Make sure that instances without public IP addresses (IPv4/IPv6) are able to connect to the internet
 
 ## Warnings

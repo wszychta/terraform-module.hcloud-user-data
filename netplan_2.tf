@@ -20,7 +20,7 @@ locals {
   netplan2_network_file_path            = "/root/cloud_config_files/config.yaml"
   netplan2_network_merge_script_path    = "/root/cloud_config_files/merge_script.sh"
   netplan2_packages_install_script_path = "/root/cloud_config_files/packages_install_script.sh"
-  
+
   # Netplan network file definition
   netplan2_network_config = {
     network = {
