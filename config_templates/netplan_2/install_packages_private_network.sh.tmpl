@@ -1,0 +1,10 @@
+#!/bin/bash
+%{ if upgrade_all_packages }
+# Upgrade existing packages
+apt update
+apt upgrade -y
+%{ endif }
+%{ if length(additional_packages) > 0 }
+# Install packages outside of cloud-init
+apt install -y %{ for package in additional_packages }${ package } %{ endfor }
+%{ endif ~}
