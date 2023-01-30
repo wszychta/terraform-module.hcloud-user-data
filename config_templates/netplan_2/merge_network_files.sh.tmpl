@@ -1,5 +1,5 @@
 #!/bin/bash
-%{ if private_network_only ~}
+%{ if private_networks_only ~}
 # Replace existing netplan file with new one in case where no public address was defined
 mv ${ private_network_file_path } ${ netplan_file_path }
 %{ else ~}
