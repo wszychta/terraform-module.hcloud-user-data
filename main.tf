@@ -128,8 +128,8 @@ locals {
     }
   }
 
-  server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
-  os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
+  server_type_letters_only      = replace(var.server_type, "/[0-9]+/", "")
+  os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[0-9]+/", "")]))
   system_user_data_files        = local.cloud_config_files_map[var.server_image]
 
   result_user_data_file = templatefile(
