@@ -70,10 +70,10 @@ locals {
     "${path.module}/config_templates/common/install_packages_private_network.sh.tmpl",
     {
       upgrade_all_packages    = var.upgrade_all_packages
-      additional_packages     = local.server_type_letters_only == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
-      restart_network         = local.server_type_letters_only != "ubuntu" ? true : false
-      restart_network_service = local.server_type_letters_only == "debian" ? "networking" : "NetworkManager"
-      package_manager         = local.server_type_letters_only == "debian" || local.server_type_letters_only == "ubuntu" ? "apt" : "dnf"
+      additional_packages     = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
+      restart_network         = local.os_image_name_without_version != "ubuntu" ? true : false
+      restart_network_service = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
+      package_manager         = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
     }
   ) : ""
 
