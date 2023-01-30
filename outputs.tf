@@ -53,6 +53,10 @@ output "netplan_network_merge_script" {
   value = local.netplan2_merge_script_file
 }
 
+output "netplan_packages_install_script" {
+  value = local.netplan2_packages_install_script_file
+}
+
 # ifcfg outputs
 
 output "result_ifcfg_cloud_config_map" {
