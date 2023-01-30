@@ -57,6 +57,7 @@ locals {
     {
       yq_version                = var.yq_version
       yq_binary                 = var.yq_binary
+      private_network_only      = var.private_network_only
       private_network_file_path = local.netplan_2_network_file_path
       netplan_file_path         = "/etc/netplan/50-cloud-init.yaml"
     }
@@ -71,7 +72,7 @@ locals {
   }] : []
 
   netplan_2_cloud_config_file_map = {
-    users = local.additional_users_map
+    users    = local.additional_users_map
     timezone = var.timezone
     write_files = flatten([
       local.additional_hosts_entries_cloud_init_write_files_map,
@@ -82,7 +83,6 @@ locals {
     ])
     runcmd = length(var.private_networks_settings) > 0 ? flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
-      var.additional_run_commands,
       ".${local.netplan_2_network_merge_script_path}"
       ]) : flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,

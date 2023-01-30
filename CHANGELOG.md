@@ -1,4 +1,13 @@
 
+# 2.2.0
+- Update Default YQ package version
+- Make sure that instances without public IP addresses (IPv4/IPv6) are able to connect to the internet
+
+## Warnings
+- If no public address is available for the instance user needs to:
+    - to provide internet connectivity via private network with NAT
+    - add route to `0.0.0.0/0` to access internet via specific private interface
+
 # 2.1.1
 - Fix Netplan network configuration on boot with - empty map of nameservers and empty list of routes is passed to neplan config insted o `null`
 - Fix sudo and ssh-authorized-keys injection 

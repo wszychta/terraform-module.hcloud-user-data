@@ -57,7 +57,7 @@ locals {
   ifcfg_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up 'System ${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
 
   ifcfg_cloud_config_file_map = {
-    users = local.additional_users_map
+    users    = local.additional_users_map
     timezone = var.timezone
     write_files = flatten([
       local.additional_hosts_entries_cloud_init_write_files_map,
