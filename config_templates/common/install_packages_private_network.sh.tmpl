@@ -3,7 +3,7 @@
 # Restart network before task starts to apply networking changes
 systemctl restart ${ restart_network_service }
 %{ if restart_network_service == "NetworkManager" ~}
-%{ for cmd in restart_network_ifcfg_commands ~}
+%{ for cmd in restart_network_commands ~}
 ${ cmd }
 %{ endfor ~}
 %{ endif ~}
