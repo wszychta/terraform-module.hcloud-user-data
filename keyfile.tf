@@ -38,7 +38,7 @@ locals {
     }
   ] : []
 
-  # keyfile_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up '${local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
+  keyfile_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up '${local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
 
   keyfile_cloud_config_file_map = {
     users    = local.additional_users_map
@@ -50,7 +50,7 @@ locals {
       local.timezone_cloud_init_write_files_map,
       local.packages_install_script_file_map
     ])
-    # bootcmd = length(local.keyfile_bootcmd_commands) > 0 ? local.keyfile_bootcmd_commands : null
+    bootcmd = length(local.keyfile_bootcmd_commands) > 0 ? local.keyfile_bootcmd_commands : null
     runcmd = flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
       (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.packages_install_script_path}"] : [],

@@ -69,13 +69,12 @@ locals {
   packages_install_script_file = length(var.private_networks_settings) > 0 && var.private_networks_only ? templatefile(
     "${path.module}/config_templates/common/install_packages_private_network.sh.tmpl",
     {
-      upgrade_all_packages    = var.upgrade_all_packages
-      additional_packages     = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
-      restart_network         = local.os_image_name_without_version != "ubuntu" ? true : false
-      restart_network_service = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
-      # restart_network_ifcfg_commands = local.os_image_name_without_version == "centos-stream" || local.os_image_name_without_version == "rocky" ? local.ifcfg_bootcmd_commands : []
-      restart_network_ifcfg_commands = []
-      package_manager                = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
+      upgrade_all_packages     = var.upgrade_all_packages
+      additional_packages      = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
+      restart_network          = local.os_image_name_without_version != "ubuntu" ? true : false
+      restart_network_service  = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
+      restart_network_commands = local.keyfile_bootcmd_commands
+      package_manager          = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
     }
   ) : ""
 
