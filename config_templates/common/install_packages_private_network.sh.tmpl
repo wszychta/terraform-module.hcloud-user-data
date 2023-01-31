@@ -2,6 +2,11 @@
 %{ if restart_network ~}
 # Restart network before task starts to apply networking changes
 systemctl restart ${ restart_network_service }
+%{ if restart_network_service == "NetworkManager" ~}
+%{ for cmd in restart_network_ifcfg_commands ~}
+${ cmd }
+%{ endfor ~}
+%{ endif ~}
 %{ endif ~}
 %{ if upgrade_all_packages ~}
 # Upgrade existing packages

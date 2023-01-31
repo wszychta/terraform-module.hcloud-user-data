@@ -69,11 +69,12 @@ locals {
   packages_install_script_file = length(var.private_networks_settings) > 0 && var.private_networks_only ? templatefile(
     "${path.module}/config_templates/common/install_packages_private_network.sh.tmpl",
     {
-      upgrade_all_packages    = var.upgrade_all_packages
-      additional_packages     = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
-      restart_network         = local.os_image_name_without_version != "ubuntu" ? true : false
-      restart_network_service = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
-      package_manager         = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
+      upgrade_all_packages           = var.upgrade_all_packages
+      additional_packages            = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
+      restart_network                = local.os_image_name_without_version != "ubuntu" ? true : false
+      restart_network_service        = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
+      restart_network_ifcfg_commands = local.os_image_name_without_version == "centos-stream" || local.os_image_name_without_version == "rocky" ? local.ifcfg_bootcmd_commands : []
+      package_manager                = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
     }
   ) : ""
 
@@ -129,7 +130,7 @@ locals {
   }
 
   server_type_letters_only      = replace(var.server_type, "/[0-9]+/", "")
-  os_image_name_without_version = join("-", slice(split("-", var.server_image), 0, length(split("-", var.server_image))-1))
+  os_image_name_without_version = join("-", slice(split("-", var.server_image), 0, length(split("-", var.server_image)) - 1))
   system_user_data_files        = local.cloud_config_files_map[var.server_image]
 
   result_user_data_file = templatefile(

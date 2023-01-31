@@ -30,10 +30,6 @@ output "packages_install_script" {
   value = local.packages_install_script_file
 }
 
-output "os_image_name_without_version" {
-  value = local.os_image_name_without_version
-}
-
 # interfaces.d outputs
 
 output "result_interfacesd_file_map" {
