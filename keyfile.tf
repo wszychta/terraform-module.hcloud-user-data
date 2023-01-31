@@ -24,7 +24,7 @@ locals {
       content = base64encode(templatefile(
         "${path.module}/config_templates/keyfile/con.nmconnection.tmpl",
         {
-          device_id             = local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
+          device_id             = local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
           nameservers_addresses = length(net_config.nameservers.addresses) == 0 ? [] : net_config.nameservers.addresses
           search_domains        = length(net_config.nameservers.search) == 0 ? [] : net_config.nameservers.search
           routes = flatten([for gateway, networks in net_config.routes : [
@@ -38,7 +38,7 @@ locals {
     }
   ] : []
 
-  # keyfile_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up '${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
+  # keyfile_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up '${local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
 
   keyfile_cloud_config_file_map = {
     users    = local.additional_users_map
