@@ -8,7 +8,7 @@ autoconnect=true
 
 [ipv4]
 %{ if length(nameservers_addresses) > 0 ~}
-dns=%{ for address in nameservers_list }${address};%{ endfor }
+dns=%{ for address in nameservers_addresses }${address};%{ endfor }
 %{ endif ~}
 %{ if length(search_domains) > 0 ~}
 dns-search=%{ for domain in search_domains }${ domain };%{ endfor }
