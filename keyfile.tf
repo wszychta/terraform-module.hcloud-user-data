@@ -25,8 +25,8 @@ locals {
         "${path.module}/config_templates/keyfile/con.nmconnection.tmpl",
         {
           device_id             = local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"
-          nameservers_addresses = length(net_config.nameservers.addresses) == 0 ? [] : length(net_config.nameservers.addresses) == 1 ? slice(net_config.nameservers.addresses, 0, 1) : slice(net_config.nameservers.addresses, 0, 2)
-          search_domains        = length(net_config.nameservers.search) == 0 ? [] : join(" ", net_config.nameservers.search)
+          nameservers_addresses = length(net_config.nameservers.addresses) == 0 ? [] : net_config.nameservers.addresses
+          search_domains        = length(net_config.nameservers.search) == 0 ? [] : net_config.nameservers.search
           routes = flatten([for gateway, networks in net_config.routes : [
             for network in networks : "${network},${gateway}"
           ]])
