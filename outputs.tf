@@ -64,6 +64,14 @@ output "result_ifcfg_cloud_config_map" {
   value = local.ifcfg_cloud_config_file_map
 }
 
+output "ifcfg_network_config_files_map" {
+  value = local.ifcfg_network_config_files_map
+}
+
+output "ifcfg_network_routes_files_map" {
+  value = local.ifcfg_network_routes_files_map
+}
+
 # keyfile outputs
 
 output "result_keyfile_cloud_config_map" {
