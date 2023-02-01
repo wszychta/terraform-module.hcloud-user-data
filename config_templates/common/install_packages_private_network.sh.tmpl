@@ -10,7 +10,7 @@ ${ cmd }
 %{ endif ~}
 %{ if upgrade_all_packages ~}
 # Upgrade existing packages
-%{ if package_manager == "apt" }apt update && apt upgrade -y%{ else }dnf update -y%{ endif ~}
+%{ if package_manager == "apt" }apt update && DEBIAN_FRONTEND=noninteractive apt upgrade -y%{ else }dnf update -y%{ endif ~}
 %{ endif ~}
 %{ if length(additional_packages) > 0 }
 # Install packages outside of cloud-init
