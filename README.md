@@ -188,7 +188,7 @@ If you have and idea how to improve this module please:
 4. In my spare time I will look at proposed changes
 
 ## Copyright 
-Copyright © 2021 Wojciech Szychta
+Copyright © 2023 Wojciech Szychta
 
 ## License
 GNU GENERAL PUBLIC LICENSE Version 3

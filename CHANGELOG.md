@@ -1,3 +1,5 @@
+# 2.2.1
+- Update Copyright note
 
 # 2.2.0
 - Update Default YQ package version
