@@ -108,24 +108,24 @@ locals {
       "cpx" = local.keyfile_cloud_config_file_map
     }
     "fedora-37" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "centos-stream-8" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "centos-stream-9" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "rocky-8" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "rocky-9" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
   }
 
