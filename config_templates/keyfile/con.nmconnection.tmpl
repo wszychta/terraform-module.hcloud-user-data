@@ -1,0 +1,25 @@
+[connection]
+id=${ device_id }
+type=ethernet
+interface-name=${ device_id }
+autoconnect=true
+
+[ethernet]
+
+[ipv4]
+%{ if length(nameservers_addresses) > 0 ~}
+dns=%{ for address in nameservers_addresses }${address};%{ endfor }
+%{ endif ~}
+%{ if length(search_domains) > 0 ~}
+dns-search=%{ for domain in search_domains }${ domain };%{ endfor }
+%{ endif ~}
+ignore-auto-dns=true
+method=auto
+%{ if length(routes) > 0 ~}
+%{ for route in routes ~}
+route${ index(routes,route)+1 }=${route}
+%{ endfor ~}
+%{ endif ~}
+
+[ipv6]
+method=ignore

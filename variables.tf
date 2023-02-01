@@ -34,6 +34,11 @@ variable "additional_users" {
   default = []
 }
 
+variable "private_networks_only" {
+  type    = bool
+  default = false
+}
+
 variable "private_networks_settings" {
   type = list(object(
     {
@@ -98,7 +103,7 @@ variable "timezone" {
 
 variable "yq_version" {
   type    = string
-  default = "v4.6.3"
+  default = "v4.30.5"
 }
 
 variable "yq_binary" {

@@ -57,22 +57,24 @@ locals {
   ifcfg_bootcmd_commands = length(var.private_networks_settings) > 0 ? [for net_config in var.private_networks_settings : "nmcli con up 'System ${local.os_image_name_without_version == "fedora" ? "eth${sum([1, index(var.private_networks_settings, net_config)])}" : local.server_type_letters_only == "cpx" ? "enp${sum([7, index(var.private_networks_settings, net_config)])}s0" : "ens${sum([10, index(var.private_networks_settings, net_config)])}"}'"] : []
 
   ifcfg_cloud_config_file_map = {
-    users = local.additional_users_map
+    users    = local.additional_users_map
     timezone = var.timezone
     write_files = flatten([
       local.additional_hosts_entries_cloud_init_write_files_map,
       local.additional_files_cloud_init_write_files_map,
       local.ifcfg_network_config_files_map,
       local.ifcfg_network_routes_files_map_no_empty_elements,
-      local.timezone_cloud_init_write_files_map
+      local.timezone_cloud_init_write_files_map,
+      local.packages_install_script_file_map
     ])
     bootcmd = length(local.ifcfg_bootcmd_commands) > 0 ? local.ifcfg_bootcmd_commands : null
     runcmd = flatten([
       local.additional_hosts_entries_cloud_init_run_cmd_list,
+      (var.upgrade_all_packages || length(var.additional_packages) > 0) && var.private_networks_only ? [".${local.packages_install_script_path}"] : [],
       var.additional_run_commands
     ])
-    packages        = length(var.additional_packages) > 0 ? var.additional_packages : null
-    package_upgrade = var.upgrade_all_packages
+    packages        = length(var.additional_packages) > 0 && var.private_networks_only != true ? var.additional_packages : null
+    package_upgrade = var.upgrade_all_packages && var.private_networks_only != true ? true : false
     power_state = var.timezone != null || var.reboot_instance || var.upgrade_all_packages || length(var.private_networks_settings) > 0 ? {
       mode    = "reboot"
       delay   = "now"

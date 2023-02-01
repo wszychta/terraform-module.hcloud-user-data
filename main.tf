@@ -64,6 +64,28 @@ locals {
     permissions = "0644"
   }
 
+  # Update/install packages script file definition
+  packages_install_script_path = "/root/cloud_config_files/packages_install_script.sh"
+  packages_install_script_file = length(var.private_networks_settings) > 0 && var.private_networks_only ? templatefile(
+    "${path.module}/config_templates/common/install_packages_private_network.sh.tmpl",
+    {
+      upgrade_all_packages     = var.upgrade_all_packages
+      additional_packages      = local.os_image_name_without_version == "debian" && length(local.interfaced_nameservers_list) > 0 ? concat(var.additional_packages, ["resolvconf"]) : var.additional_packages
+      restart_network          = local.os_image_name_without_version != "ubuntu" ? true : false
+      restart_network_service  = local.os_image_name_without_version == "debian" ? "networking" : "NetworkManager"
+      restart_network_commands = local.keyfile_bootcmd_commands
+      package_manager          = local.os_image_name_without_version == "debian" || local.os_image_name_without_version == "ubuntu" ? "apt" : "dnf"
+    }
+  ) : ""
+
+  packages_install_script_file_map = length(var.private_networks_settings) > 0 && var.private_networks_only ? [{
+    encoding    = "b64"
+    content     = base64encode(local.packages_install_script_file)
+    owner       = "root:root"
+    path        = local.packages_install_script_path
+    permissions = "0700"
+  }] : []
+
   cloud_config_files_map = {
     "debian-10" = {
       "cx"  = local.interfaced_cloud_config_file_map
@@ -77,22 +99,38 @@ locals {
       "cx"  = local.netplan_2_cloud_config_file_map
       "cpx" = local.netplan_2_cloud_config_file_map
     }
-    "fedora-34" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+    "ubuntu-22.04" = {
+      "cx"  = local.netplan_2_cloud_config_file_map
+      "cpx" = local.netplan_2_cloud_config_file_map
+    }
+    "fedora-36" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "fedora-37" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "centos-stream-8" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "centos-stream-9" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
     "rocky-8" = {
-      "cx"  = local.ifcfg_cloud_config_file_map
-      "cpx" = local.ifcfg_cloud_config_file_map
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "rocky-9" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
     }
   }
 
-  server_type_letters_only      = replace(var.server_type, "/[1-9]+/", "")
-  os_image_name_without_version = join("-", compact([for element in split("-", var.server_image) : replace(element, "/[1-9]+/", "")]))
+  server_type_letters_only      = replace(var.server_type, "/[0-9]+/", "")
+  os_image_name_without_version = join("-", slice(split("-", var.server_image), 0, length(split("-", var.server_image)) - 1))
   system_user_data_files        = local.cloud_config_files_map[var.server_image]
 
   result_user_data_file = templatefile(

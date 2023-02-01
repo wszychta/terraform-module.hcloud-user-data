@@ -1,4 +1,25 @@
 
+# 2.2.0
+- Update Default YQ package version
+- Update a list of available instances types
+- Make sure that instances without public IP addresses (IPv4/IPv6) are able to connect to the internet
+- Update/install packages when there is no public network in the instance and default route is configured
+- Replace `ifcfg` network configuration with `NetworkManager keyfile` format
+- Add new supported images:
+    - fedora-36
+    - fedora-37
+    - rocky-9
+    - centos-stream-9
+- Remove unsupported images:
+    - fedora-34 
+
+## Warnings
+- `ifcfg` configuration is depricated now and will be remove in the next release
+- If no public address is available for the instance user needs to:
+    - to provide internet connectivity via private network with NAT
+    - add route to `0.0.0.0/0` to access internet via specific private interface
+    - add the same route to private network settings 
+
 # 2.1.1
 - Fix Netplan network configuration on boot with - empty map of nameservers and empty list of routes is passed to neplan config insted o `null`
 - Fix sudo and ssh-authorized-keys injection 
