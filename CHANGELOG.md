@@ -1,3 +1,6 @@
+# 2.2.2
+- Set packages upgrade script `apt upgrade` to non-interactive mode
+
 # 2.2.1
 - Fix readme
 - Fix Copyright note
