@@ -87,35 +87,35 @@ locals {
   }] : []
 
   cloud_config_files_map = {
-    "debian-10" = {
-      "cx"  = local.interfaced_cloud_config_file_map
-      "cpx" = local.interfaced_cloud_config_file_map
-    }
     "debian-11" = {
       "cx"  = local.interfaced_cloud_config_file_map
       "cpx" = local.interfaced_cloud_config_file_map
     }
-    "ubuntu-20.04" = {
-      "cx"  = local.netplan_2_cloud_config_file_map
-      "cpx" = local.netplan_2_cloud_config_file_map
+    "debian-12" = {
+      "cx"  = local.interfaced_cloud_config_file_map
+      "cpx" = local.interfaced_cloud_config_file_map
     }
     "ubuntu-22.04" = {
       "cx"  = local.netplan_2_cloud_config_file_map
       "cpx" = local.netplan_2_cloud_config_file_map
     }
-    "fedora-36" = {
+    "ubuntu-24.04" = {
+      "cx"  = local.netplan_2_cloud_config_file_map
+      "cpx" = local.netplan_2_cloud_config_file_map
+    }
+    "fedora-40" = {
       "cx"  = local.keyfile_cloud_config_file_map
       "cpx" = local.keyfile_cloud_config_file_map
     }
-    "fedora-37" = {
-      "cx"  = local.keyfile_cloud_config_file_map
-      "cpx" = local.keyfile_cloud_config_file_map
-    }
-    "centos-stream-8" = {
+    "fedora-41" = {
       "cx"  = local.keyfile_cloud_config_file_map
       "cpx" = local.keyfile_cloud_config_file_map
     }
     "centos-stream-9" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "centos-stream-10" = {
       "cx"  = local.keyfile_cloud_config_file_map
       "cpx" = local.keyfile_cloud_config_file_map
     }
@@ -124,6 +124,14 @@ locals {
       "cpx" = local.keyfile_cloud_config_file_map
     }
     "rocky-9" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "alma-8" = {
+      "cx"  = local.keyfile_cloud_config_file_map
+      "cpx" = local.keyfile_cloud_config_file_map
+    }
+    "alma-9" = {
       "cx"  = local.keyfile_cloud_config_file_map
       "cpx" = local.keyfile_cloud_config_file_map
     }
