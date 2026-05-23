@@ -51,7 +51,7 @@ locals {
   additional_users_map = length(var.additional_users) > 0 ? [for user in var.additional_users :
     {
       name                = user.username
-      sudo                = user.sudo_options
+      sudo                = try(user.sudo_options, null)
       ssh_authorized_keys = length(user.ssh_public_keys) > 0 ? user.ssh_public_keys : null
     }
   ] : []
