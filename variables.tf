@@ -28,7 +28,7 @@ variable "server_image" {
 variable "additional_users" {
   type = list(object({
     username        = string
-    sudo_options    = string
+    sudo_options    = optional(string)
     ssh_public_keys = list(string)
   }))
   default = []
